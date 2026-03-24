@@ -4,27 +4,27 @@
 <div class="container-flex"><!--DIV do flex cards horizontal superior-->
 <a href="#" class="text-decoration-none text-dark">    
 <div class="card">
-    <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
-    <div class="card-body">
-     <h5 class="card-title">Python Projects</h5>
+    <img src="https://i.ibb.co/dwVJv9K8/Python-Symbol.png" class="card-img-top" alt="Image-qlqr">
+    <div class="card-body" style="background-color: #7D007D">
+     <h5 class="card-title" style="color: white"><span style="color: #0F52BA">Pyt</span><span style="color: #FFD32C">hon</span> Projects</h5>
     </div>
 </div>
 </a>
 
 <a href="#" class="text-decoration-none text-dark">
 <div class="card">
-  <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
-  <div class="card-body">
-    <h5 class="card-title">JavaScript Projects</h5>
+  <img src="https://i.ibb.co/Vc2YRTXx/Js-Symbol.jpg" class="card-img-top" alt="Image-qlqr">
+  <div class="card-body" style="background-color: #7D007D">
+    <h5 class="card-title"><span style="color: yellow">JavaScript</span> Projects</h5>
   </div>
 </div>
 </a>
 
 <a href="#" class="text-decoration-none text-dark">
-<div class="card">
-  <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
+<div class="card" style="background-color: #7D007D">
+  <img src="https://i.ibb.co/yF044Xkz/HTML-5-Symbol.png" class="card-img-top" alt="Image-qlqr">
   <div class="card-body">
-    <h5 class="card-title">HTML 5 Projects</h5>
+    <h5 class="card-title" style="color: white">HTML 5 Projects</h5>
   </div>
 </div>
 </a>
@@ -32,25 +32,25 @@
 
 <div class="container-flex"><!--DIV cards horizontal inferior-->
     <a href="#" class="text-decoration-none text-dark">    
-<div class="card">
-    <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
+<div class="card" style="background-color: #7D007D">
+    <img src="https://i.ibb.co/QvkJfnbY/Java-Symbol.png" class="card-img-top" alt="Image-qlqr">
     <div class="card-body">
-     <h5 class="card-title">Java Projects</h5>
+     <h5 class="card-title" style="color: white"><span style="color: #FFA500">Java</span> Projects</h5>
     </div>
 </div>
 </a>
 
 <a href="#" class="text-decoration-none text-dark">
-<div class="card">
-  <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
+<div class="card" style="background-color: #7D007D">
+  <img src="https://i.ibb.co/6cxLK2P2/PHP-Symbol.png" class="card-img-top" alt="Image-qlqr">
   <div class="card-body">
-    <h5 class="card-title">PHP Projects</h5>
+    <h5 class="card-title" style="color: white"><span style="color: #4666B4">PHP</span> Projects</h5>
   </div>
 </div>
 </a>
 
 <a href="#" class="text-decoration-none text-dark">
-<div class="card">
+<div class="card" style="background-color: #7D007D">
   <img src="https://imgs.search.brave.com/9nN-OxcyyPdPi3DfP4e3bx8_IqTpbUFK2Y1Vmp7fqRo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3RpL2ZvdG9z/LWdyYXRpcy90Mi8y/NTQ3MTM0OS10aXJv/LWRvLXVtYS1hcmVh/LWRlLXRyYWJhbGhv/LWNvbXB1dGFkb3It/ZS10ZWNsYWRvLWUt/cmF0by1kZW50cm8t/YS1jcmlhdGl2by1t/b2Rlcm5vLW9mZmlj/ZS1haS1nZXJhZG8t/Zm90by5qcGc" class="card-img-top" alt="Image-qlqr">
   <div class="card-body">
     <h5 class="card-title">Mobile Projects</h5>
