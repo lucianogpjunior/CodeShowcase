@@ -20,5 +20,10 @@ yarn build
 yarn lint
 ```
 
+### Baixar pinia e Bootstrap
+```
+yarn add pinia bootstrap-vue bootstrap --ignore-engines
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
