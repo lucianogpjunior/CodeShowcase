@@ -1,5 +1,5 @@
 <template>
-   <div><!--Div PAI-->
+   <div class="div-container"><!--Div PAI-->
 
 <div class="container-flex"><!--DIV do flex cards horizontal superior-->
 <a href="#" class="text-decoration-none text-dark">    
@@ -70,6 +70,12 @@
 .container-flex{
     display: flex;
     gap: 15px;
+}
+
+.div-container {
+    display: flex;
+    flex-direction: column; /* Empilha as linhas uma sob a outra */
+    gap: 20px; /* Isso cria o espaço vertical entre as duas .container-flex */
 }
 
 .text-decoration-none {

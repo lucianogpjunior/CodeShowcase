@@ -52,7 +52,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  position: end;
+  position: relative;
 }
 
 .main-content {
