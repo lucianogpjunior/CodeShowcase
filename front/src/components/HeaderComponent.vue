@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header><p>*A fazer troca de modo claro/escuro*</p></header>
+    <header><p style="text-align: center;">*A fazer troca de modo claro/escuro*</p></header>
   <!--NavBar abaixo-->
     <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
       <div class="container-fluid">
@@ -34,7 +34,7 @@
 
           <div class="nav-section-right d-flex align-items-center justify-content-end">
             <b-button variant="link" class="text-white text-decoration-none me-2">
-              Cadastre-se
+              Log-in
             </b-button>
 
             <b-button variant="primary">

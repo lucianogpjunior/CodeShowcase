@@ -1,28 +1,17 @@
 <template>
   <div id="app">
-    <HeaderComponent/>
-
-    <main class="main-content">
-      <CardsComponent /> 
-      <router-view />
-    </main>
-
-    <FooterComponent/>
+    <InterfaceInicial />
   </div>
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-import HeaderComponent from './components/HeaderComponent.vue';
-import FooterComponent from './components/FooterComponent.vue';
-import CardsComponent from './components/CardsComponent.vue';
+import InterfaceInicial from './components/InterfaceInicial.vue';
+
 
 export default {
   name: 'App',
   components: {
-    HeaderComponent,
-    FooterComponent,
-    CardsComponent
+    InterfaceInicial,
   }
 }
 </script>

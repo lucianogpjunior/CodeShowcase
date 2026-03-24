@@ -70,6 +70,7 @@
 .container-flex{
     display: flex;
     gap: 15px;
+    justify-content: center;
 }
 
 .div-container {
