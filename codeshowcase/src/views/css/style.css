@@ -1,0 +1,207 @@
+:root {
+
+    --bg: #f4f4f4;
+    --text: #222;
+
+    --navbar: 	#DCDCDC;
+
+    --table-bg: white;
+    --table-header: #00bcd4;
+    --table-header-text: white;
+
+    --border: #dcdcdc;
+    --hover: #f1f1f1;
+
+    --shadow: rgba(0,0,0,0.1);
+}
+
+/* DARK MODE */
+
+body.dark {
+
+    --bg: #121212;
+    --text: #f5f5f5;
+
+    --navbar: #1e1e1e;
+
+    --table-bg: #1e1e1e;
+    --table-header: #2196f3;
+    --table-header-text: white;
+
+    --border: #333;
+    --hover: #2a2a2a;
+
+    --shadow: rgba(0,0,0,0.4);
+}
+
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/* BODY */
+
+html, body {
+    height: 100%;
+}
+
+body {
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+
+    background-color: var(--bg);
+    color: var(--text);
+
+    transition: 0.3s;
+}
+
+/* NAVBAR */
+
+.navbar {
+
+    width: 100%;
+    background-color: var(--navbar);
+
+    padding: 15px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+/* LOGO */
+
+.logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* LINKS */
+
+.nav-links {
+
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+
+    color: white;
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+
+    color: cyan;
+}
+
+/* BOTÃO TEMA */
+
+.theme-btn {
+
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, black, black);
+
+    color: white;
+    font-size: 20px;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.3s;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.theme-btn:hover {
+
+    transform: scale(1.1) rotate(10deg);
+
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+.theme-btn:active {
+
+    transform: scale(0.95);
+}
+
+#themeIcon {
+    width: 32px;
+    height: 32px;
+}
+
+/* MENU MOBILE */
+
+.menu-btn {
+
+    display: none;
+
+    font-size: 28px;
+
+    background: none;
+    border: none;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 768px) {
+
+    .menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+
+        display: none;
+        flex-direction: column;
+
+        position: absolute;
+
+        top: 70px;
+        left: 0;
+
+        width: 100%;
+
+        background-color: var(--navbar);
+
+        padding: 20px 0;
+
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}

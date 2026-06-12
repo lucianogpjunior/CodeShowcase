@@ -83,7 +83,7 @@ class UserEntity {
     }
 
     public function setSenha($senha) {
-        if (password_get_info($senha)['algo'] === 0) {
+        if (password_get_info($senha)['a'] === 0) {
             $this->senha = password_hash($senha, PASSWORD_DEFAULT);
         } else {
             $this->senha = $senha;
