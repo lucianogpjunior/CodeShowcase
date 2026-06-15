@@ -35,7 +35,7 @@ $links = [
     <div class="navbar-buttons">
 
         <button id="theme-btn" class="theme-btn" onclick="trocarTema()">
-            <img id="themeIcon" src="/assets/moon.png" alt="Tema">
+            <img id="themeIcon" src="public/assets/moon.png" alt="Tema">
         </button>
 
         <button class="menu-btn" onclick="abrirMenu()">
