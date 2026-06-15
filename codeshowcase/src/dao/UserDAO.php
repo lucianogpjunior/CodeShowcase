@@ -22,7 +22,6 @@ class PessoaDAO {
   }
 
   // READ — Busca Pessoa por ID
-  /*
   public function read($id) {
     $sql = "SELECT * FROM pessoas_tb WHERE id = ?";
     
@@ -67,6 +66,5 @@ class PessoaDAO {
     $stmt = $this->conn->prepare($sql);
     return $stmt->execute([$p->getNome(), $p->getCpf(), $p->getEmail(), $p->getIdade(), $p->getId()]);
   }
-*/
 }
 ?>
