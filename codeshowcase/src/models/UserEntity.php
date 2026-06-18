@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 class UserEntity {
     private  $id;
     private  $nomeCompleto;

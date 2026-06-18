@@ -1,6 +1,9 @@
 <?php
-    require_once(__DIR__ . "/../models/UserEntity.php");
-    require_once(__DIR__ . "/../dao/UserDAO.php");
+    namespace App\Controller;
+
+    use App\Models\UserEntity;
+    use App\DAO\UserDAO;
+
 
     $nome = trim($_POST['nome'] ?? '');
     $email = trim($_POST['email']);
