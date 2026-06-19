@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use InvalidArgumentException;
+
 class UserEntity {
     private  $id;
     private  $nomeCompleto;
@@ -75,17 +77,20 @@ class UserEntity {
     }
 
     public function setCpf($cpf) {
-        $this->cpf = preg_replace('/[^0-9]/', '', $cpf);
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
-        if(strlen($cpf) !== 11){
-            throw new InvalidArgumentException("CPF deve conter 11 dígitos.");
+        if (strlen($cpf) !== 11) {
+            throw new \InvalidArgumentException("CPF deve conter 11 dígitos.");
         }
-
+        
         $this->cpf = $cpf;
     }
 
     public function setSenha($senha) {
-        if (password_get_info($senha)['a'] === 0) {
+
+        $info = password_get_info($senha);
+    
+        if ($info['algo'] === null) {
             $this->senha = password_hash($senha, PASSWORD_DEFAULT);
         } else {
             $this->senha = $senha;

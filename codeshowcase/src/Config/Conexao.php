@@ -5,7 +5,7 @@ namespace App\Config;
 use PDO;
 use PDOException;
 
-class Database {
+class Conexao {
     private static $instancia = null;
 
     public static function getConexao() {

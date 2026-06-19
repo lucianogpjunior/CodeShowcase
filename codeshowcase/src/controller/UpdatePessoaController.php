@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__ . "/../models/UserEntity.php");
-require_once(__DIR__ . "/../dao/UserDAO.php");
+use App\Models\UserEntity;
+use App\DAO\UserDAO;
 
 if (!isset($_POST['id']) || !is_number(['id'])) {
     header('Location: ../index.php');

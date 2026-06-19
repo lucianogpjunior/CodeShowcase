@@ -12,9 +12,9 @@
 
 $links = [
     "Home" => "#",
-    "Sobre" => "#",
-    "Serviços" => "#",
-    "Contato" => "#"
+    "Recursos" => "#",
+    "Projetos" => "#",
+    "Tutoriais" => "#"
 ];
 
 ?>
@@ -25,10 +25,15 @@ $links = [
     </div>
 
     <div class="nav-links" id="menu">
-        <a href="index.php">Home</a>
-        <a href="#">Sobre</a>
-        <a href="produtos.php">Produtos</a>
-        <a href="contatos.php">Contato</a>
+        <a href="../index.php">Home</a>
+        <a href="#">Recursos</a>
+        <a href="produtos.php">Projetos</a>
+        <a href="contatos.php">Tutoriais</a>
+    </div>
+
+    <div class="cadastro-login">
+        <a href="codeshowcase/src/views/layouts/cadastroUserView.php">Cadastrar</a>
+        <a href="login.php">Login</a>
     </div>
 
     <div class="navbar-buttons">

@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Cadastrar</h1>
 
-        <form action="../controller/CadastroUserController.php" method="POST">
+        <form action="/codeshowcase/src/controller/CadastroUserController.php" method="POST">
 
             <div class="input-group">
                 <label for="nome">Nome:</label>
@@ -45,6 +45,8 @@
                 <label for="senha">Senha:</label>
                 <input id="idsenha" name="senha" type="text" required>
             </div>
+
+            <button type="submit">Cadastrar</button>
     </div>
 
     <script>
