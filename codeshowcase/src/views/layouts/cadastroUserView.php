@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
-    <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'src/views/layouts/header.php'; ?>
     <div class="container">
         <h1>Cadastrar</h1>
 

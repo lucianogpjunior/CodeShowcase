@@ -21,7 +21,7 @@ $links = [
 
 <nav class="navbar">
     <div style="display: flex; align-items: center;">
-        <img src="public/assets/favicon.ico" class="logo" alt="Logo">
+        <img src="../../public/assets/favicon.ico" class="logo" alt="Logo">
     </div>
 
     <div class="nav-links" id="menu">

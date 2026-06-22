@@ -1,11 +1,10 @@
 <?php
 namespace App\Controller;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
 use App\Models\UserEntity;
 use App\DAO\UserDAO;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 $nome = trim($_POST['nome'] ?? '');
 $email = trim($_POST['email']);
@@ -37,6 +36,6 @@ $user = new UserEntity(
 $CreateUser = new UserDAO();
 $CreateUser->create($user);
 
-header('Location: ../index.php');
+header('Location: ../../index.php');
 exit;
 ?>

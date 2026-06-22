@@ -26,7 +26,7 @@ class UserDAO {
 
   // READ — Busca Pessoa por ID
   public function read($id) {
-    $sql = "SELECT * FROM pessoas_tb WHERE id = ?";
+    $sql = "SELECT * FROM usuarios WHERE id = ?";
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([$id]);
