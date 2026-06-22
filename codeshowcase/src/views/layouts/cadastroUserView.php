@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Cadastrar</h1>
 
-        <form action="/codeshowcase/src/controller/CadastroUserController.php" method="POST">
+        <form action="/src/controller/CadastroUserController.php" method="POST">
 
             <div class="input-group">
                 <label for="nome">Nome:</label>
