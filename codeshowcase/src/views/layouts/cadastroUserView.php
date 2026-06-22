@@ -1,54 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar</title>
-</head>
-<body>
-    <?php include 'src/views/layouts/header.php'; ?>
-    <div class="container">
-        <h1>Cadastrar</h1>
+<?php include 'header.php'; ?>
 
-        <form action="/src/controller/CadastroUserController.php" method="POST">
+    <div class="form-wrapper">
+        <div class="container">
+            <h1>Cadastro</h1>
 
-            <div class="input-group">
-                <label for="nome">Nome:</label>
-                <input id="idnome" name="nome" type="text" required>
-            </div>
+            <form action="/src/controller/CadastroUserController.php" method="POST">
 
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input id="idemail" name="email" type="email" required>
-            </div>
+                <div class="input-group">
+                    <label for="nome">Nome:</label>
+                    <input id="idnome" name="nome" type="text" placeholder="Seu nome completo" required>
+                </div>
 
-            <div class="input-group">
-                <label for="dtNascimento">Data de Nascimento:</label>
-                <input id="iddtNascimento" name="dtNascimento" type="date" required>
-            </div>
+                <div class="input-group">
+                    <label for="email">Email:</label>
+                    <input id="idemail" name="email" type="email" placeholder="seu@email.com" required>
+                </div>
 
-            <div class="input-group">
-                <label for="cpf">CPF:</label>
+                <div class="input-group">
+                    <label for="dtNascimento">Data de Nascimento:</label>
+                    <input id="iddtNascimento" name="dtNascimento" type="date" required>
+                </div>
 
-                <input 
-                    type="text"
-                    id="idcpf"
-                    name="cpf"
-                    maxlength="14"
-                    placeholder="000.000.000-00"
-                >
-            </div>
+                <div class="input-group">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="idcpf" name="cpf" maxlength="14" placeholder="000.000.000-00">
+                </div>
 
-            <div class="input-group">
-                <label for="senha">Senha:</label>
-                <input id="idsenha" name="senha" type="text" required>
-            </div>
+                <div class="input-group">
+                    <label for="senha">Senha:</label>
+                    <input id="idsenha" name="senha" type="password" placeholder="Mínimo 8 caracteres" required>
+                </div>
 
-            <button type="submit">Cadastrar</button>
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
     </div>
 
     <script>
-
     function validarCPF(cpf){
         
         cpf = cpf.replace(/\D/g, '');
@@ -107,5 +95,6 @@
     });
     
 </script>
+<?php include 'footer.php'; ?>
 </body>
 </html>

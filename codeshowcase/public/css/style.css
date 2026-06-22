@@ -138,10 +138,38 @@
    
    /* ---------- Nav links ---------- */
    
-   .nav-links {
-       display: flex;
-       gap: 4px;
-   }
+    .navbar {
+        position: relative;
+    }
+
+    .nav-links {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 4px;
+    }
+
+    .auth-links {
+        margin-left: auto;
+        margin-right: 60px; /* distância do botão de tema */
+        display: flex;
+        gap: 10px;
+    }
+
+    .auth-links a {
+        color: var(--navbar-text);
+        text-decoration: none;
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: var(--radius-sm);
+        transition: color 0.2s, background 0.2s;
+    }
+
+    .auth-links a:hover {
+        color: var(--navbar-active);
+        background: rgba(255,255,255,0.07);
+    }
    
    .nav-links a {
        color: var(--navbar-text);

@@ -9,7 +9,6 @@
 <body>
 
 <?php
-
 $links = [
     "Home" => "#",
     "Recursos" => "#",
@@ -21,17 +20,17 @@ $links = [
 
 <nav class="navbar">
     <div style="display: flex; align-items: center;">
-        <img src="../../public/assets/favicon.ico" class="logo" alt="Logo">
+        <img src="/public/assets/favicon.ico" class="logo" alt="Logo">
     </div>
 
     <div class="nav-links" id="menu">
-        <a href="../index.php">Home</a>
+        <a href="/../../index.php">Home</a>
         <a href="#">Recursos</a>
         <a href="produtos.php">Projetos</a>
         <a href="contatos.php">Tutoriais</a>
     </div>
 
-    <div class="cadastro-login">
+    <div class="auth-links">
         <a href="src/views/layouts/cadastroUserView.php">Cadastrar</a>
         <a href="login.php">Login</a>
     </div>
@@ -39,7 +38,7 @@ $links = [
     <div class="navbar-buttons">
 
         <button id="themeBtn" class="theme-btn" onclick="trocarTema()">
-            <img id="themeIcon" src="public/assets/moon.png" alt="Tema">
+            <img id="themeIcon" src="/public/assets/moon.png" alt="Tema">
         </button>
 
         <button class="menu-btn" onclick="abrirMenu()">
@@ -66,10 +65,10 @@ function trocarTema() {
     const icon = document.getElementById("themeIcon");
 
     if (document.body.classList.contains("dark")) {
-        icon.src = "public/assets/sun.png";
+        icon.src = "/public/assets/sun.png";
         localStorage.setItem("theme", "dark");
     } else {
-        icon.src = "public/assets/moon.png";
+        icon.src = "/public/assets/moon.png";
         localStorage.setItem("theme", "light");
     }
 }
@@ -78,6 +77,6 @@ const icon = document.getElementById("themeIcon");
 
 if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
-    icon.src = "public/assets/sun.png";
+    icon.src = "/public/assets/sun.png";
 }
 </script>
