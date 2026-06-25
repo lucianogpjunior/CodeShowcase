@@ -37,6 +37,6 @@ $user = new UserEntity(
 $CreateUser = new UserDAO();
 $CreateUser->create($user);
 
-header('Location: ../index.php');
+header('Location: /../public/BaseLayout.php');
 exit;
 ?>

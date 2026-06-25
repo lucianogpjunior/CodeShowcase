@@ -1,18 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<?php
+namespace App\Views;
+use App\Controller\CadastroUserController;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+include __DIR__ . '/../../public/BaseLayout.php';
+?>
+
+<div class="header">
+    <?php include __DIR__ . '/../../public/css/layouts/header.php'; ?>
+</div>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar</title>
     <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
-    <?php include 'header.php'; ?>
-    <div class="container">
+    <div class="cadastro-container">
         <h1>Cadastrar</h1>
 
-        <form action="/src/controller/CadastroUserController.php" method="POST">
+        <form action="/create-user" method="POST">
 
             <div class="input-group">
                 <label for="nome">Nome:</label>
@@ -111,3 +117,21 @@
 </script>
 </body>
 </html>
+
+<div class="footer">
+    <?php include __DIR__ . '/../../public/css/layouts/footer.php'; ?>
+</div>
+
+<style scoped>
+    .cadastro-container{
+        margin: 100px auto;
+        padding: 20px;
+       width: 100%;
+       max-width: 440px;
+       background: var(--surface);
+       border: 1px solid var(--border);
+       border-radius: var(--radius-xl);
+       padding: 2.5rem 2rem;
+       box-shadow: 0 8px 32px var(--shadow-md)
+    }
+</style>

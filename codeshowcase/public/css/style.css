@@ -424,16 +424,6 @@
        padding: 2rem 1rem;
    }
    
-   .container {
-       width: 100%;
-       max-width: 440px;
-       background: var(--surface);
-       border: 1px solid var(--border);
-       border-radius: var(--radius-xl);
-       padding: 2.5rem 2rem;
-       box-shadow: 0 8px 32px var(--shadow-md);
-   }
-   
    body.dark .container {
        background: rgba(255,255,255,0.04);
        border-color: rgba(255,255,255,0.08);

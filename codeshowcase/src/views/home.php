@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-include 'src/views/layouts/header.php';
+require_once __DIR__ . '/../../public/BaseLayout.php';
 ?>
 
+<?php include __DIR__ . '/../../public/css/layouts/header.php'; ?>
 <main>
     <h1>Bem-vindo ao Code Showcase</h1>
     <p>Explore nossos projetos, tutoriais e recursos para desenvolvedores.</p>
@@ -27,4 +27,5 @@ include 'src/views/layouts/header.php';
 
 </main>
 
-<?php include 'src/views/layouts/footer.php'; ?>
+</body>
+<?php include __DIR__ . '/../../public/css/layouts/footer.php'; ?>

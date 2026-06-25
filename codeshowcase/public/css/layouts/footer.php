@@ -1,3 +1,7 @@
+<?php
+    include_once 'BaseLayout.php';
+?>
+
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-logo">
