@@ -1,5 +1,4 @@
 <?php
-namespace App\Views;
 use App\Controller\CadastroUserController;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
