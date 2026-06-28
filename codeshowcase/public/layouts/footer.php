@@ -25,7 +25,5 @@
     </div>
 </footer>
 
-<!-- CORRIGIDO: fechamento do </body> e </html> que estavam faltando -->
-<!-- CORRIGIDO: removido include_once do BaseLayout (já carregado pela view) -->
 </body>
 </html>

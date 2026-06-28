@@ -1,7 +1,3 @@
-<?php
-// header.php — não inclui BaseLayout (já carregado pela view)
-?>
-
 <nav class="navbar">
     <div style="display: flex; align-items: center;">
         <img src="/assets/favicon.ico" class="logo" alt="Logo">

@@ -1,7 +1,5 @@
 <?php
 
-// CORRIGIDO: namespace estava "App\models" (minúsculo), incompatível com o import
-// em UserDAO.php que usa "App\Models" (maiúsculo) — quebrava o autoload do Composer
 namespace App\Models;
 
 use InvalidArgumentException;
