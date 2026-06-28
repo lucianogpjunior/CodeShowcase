@@ -1,7 +1,3 @@
-<?php
-    include_once 'BaseLayout.php';
-?>
-
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-logo">
@@ -28,3 +24,8 @@
         <p>&copy; 2026 CodeShowcase. Todos os direitos reservados.</p>
     </div>
 </footer>
+
+<!-- CORRIGIDO: fechamento do </body> e </html> que estavam faltando -->
+<!-- CORRIGIDO: removido include_once do BaseLayout (já carregado pela view) -->
+</body>
+</html>

@@ -1,6 +1,8 @@
 <?php
-use App\controller\HomeController;
-use App\controller\UserController;
+
+// CORRIGIDO: namespaces padronizados para PascalCase (PSR-4)
+use App\Controller\HomeController;
+use App\Controller\UserController;
 
 $router->get(
     '/',
@@ -25,4 +27,3 @@ $router->get(
         'cadastroView'
     ]
 );
-?>

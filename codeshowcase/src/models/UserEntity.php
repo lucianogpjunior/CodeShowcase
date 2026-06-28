@@ -1,6 +1,8 @@
 <?php
 
-namespace App\models;
+// CORRIGIDO: namespace estava "App\models" (minúsculo), incompatível com o import
+// em UserDAO.php que usa "App\Models" (maiúsculo) — quebrava o autoload do Composer
+namespace App\Models;
 
 use InvalidArgumentException;
 
@@ -22,7 +24,8 @@ class UserEntity {
         $this->setSenha($senha);
         $this->setDataCadastro($dataCadastro);
     }
-    //getters
+
+    // Getters
     public function getId() {
         return $this->id;
     }
@@ -51,7 +54,7 @@ class UserEntity {
         return $this->dataCadastro;
     }
 
-    //setters
+    // Setters
     public function setId($id) {
         $this->id = $id;
     }
@@ -67,7 +70,7 @@ class UserEntity {
     }
 
     public function setEmail($e) {
-        if(!filter_var($e, FILTER_VALIDATE_EMAIL))
+        if (!filter_var($e, FILTER_VALIDATE_EMAIL))
             throw new InvalidArgumentException("Email inválido.");
         $this->email = $e;
     }
@@ -87,7 +90,6 @@ class UserEntity {
     }
 
     public function setSenha($senha) {
-
         $info = password_get_info($senha);
     
         if ($info['algo'] === null) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controller;
+namespace App\Controller;
 
 class HomeController
 {
@@ -10,7 +10,7 @@ class HomeController
     }
 
     public function redirectHome(){
-        header('Location: /home').
+        header('Location: /home');
         exit;
     }
 }
