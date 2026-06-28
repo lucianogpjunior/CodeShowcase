@@ -1,42 +1,35 @@
 <?php
-
-require_once __DIR__ . '/../../vendor/autoload.php';
-include __DIR__ . '/../../public/BaseLayout.php';
+// BaseLayout abre <html>, <head> e <body>
+require_once __DIR__ . '/../../public/BaseLayout.php';
 ?>
 
-<div class="header">
-    <?php include __DIR__ . '/../../public/css/layouts/header.php'; ?>
-</div>
+<?php include __DIR__ . '/../../public/layouts/header.php'; ?>
 
-<head>
-    <link rel="stylesheet" href="style.css">
-
-</head>
-<body>
+<main>
     <div class="cadastro-container">
         <h1>Cadastrar</h1>
 
-        <form action="/create-user" method="POST">
+        <!-- CORRIGIDO: </form> estava faltando -->
+        <form action="/cadastro-user" method="POST">
 
             <div class="input-group">
-                <label for="nome">Nome:</label>
+                <label for="idnome">Nome:</label>
                 <input id="idnome" name="nome" type="text" required>
             </div>
 
             <div class="input-group">
-                <label for="email">Email:</label>
+                <label for="idemail">Email:</label>
                 <input id="idemail" name="email" type="email" required>
             </div>
 
             <div class="input-group">
-                <label for="dtNascimento">Data de Nascimento:</label>
+                <label for="iddtNascimento">Data de Nascimento:</label>
                 <input id="iddtNascimento" name="dtNascimento" type="date" required>
             </div>
 
             <div class="input-group">
-                <label for="cpf">CPF:</label>
-
-                <input 
+                <label for="idcpf">CPF:</label>
+                <input
                     type="text"
                     id="idcpf"
                     name="cpf"
@@ -46,90 +39,73 @@ include __DIR__ . '/../../public/BaseLayout.php';
             </div>
 
             <div class="input-group">
-                <label for="senha">Senha:</label>
-                <input id="idsenha" name="senha" type="text" required>
+                <label for="idsenha">Senha:</label>
+                <input id="idsenha" name="senha" type="password" required>
             </div>
 
             <button type="submit">Cadastrar</button>
+
+        </form>
+        <!-- CORRIGIDO: </form> adicionado -->
     </div>
+</main>
 
-    <script>
+<script>
+function validarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
 
-    function validarCPF(cpf){
-        
-        cpf = cpf.replace(/\D/g, '');
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1+$/.test(cpf)) return false;
 
-        if(cpf.length !== 11) return false;
+    let soma = 0;
+    let resto;
 
-        if(/^(\d)\1+$/.test(cpf)) return false;
-
-        let soma = 0;
-        let resto;
-
-        for(let i = 1; i <= 9; i++){
-            soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
-        }
-
-        resto = (soma * 10) % 11;
-
-        if(resto === 10 || resto === 11){
-            resto = 0;
-        }
-
-        if(resto !== parseInt(cpf.substring(9, 10))){
-            return false;
-        }
-
-        soma = 0;
-
-        for(let i = 1; i <= 10; i++){
-            soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
-        }
-
-        resto = (soma * 10) % 11;
-
-        if(resto === 10 || resto === 11){
-            resto = 0;
-        }
-
-        if(resto !== parseInt(cpf.substring(10, 11))){
-            return false;
-        }
-
-        return true;
+    for (let i = 1; i <= 9; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
 
-    document.querySelector('form').addEventListener('submit', function(e){
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(9, 10))) return false;
 
-        const cpf = cpfInput.value;
+    soma = 0;
 
-        if(!validarCPF(cpf)){
+    for (let i = 1; i <= 10; i++) {
+        soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    }
 
-            alert('CPF inválido!');
-            e.preventDefault();
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(10, 11))) return false;
 
-        }
+    return true;
+}
 
-    });
-    
+document.querySelector('form').addEventListener('submit', function (e) {
+    // CORRIGIDO: cpfInput não estava declarado, causava ReferenceError
+    const cpfInput = document.getElementById('idcpf');
+    const cpf = cpfInput.value;
+
+    if (!validarCPF(cpf)) {
+        alert('CPF inválido!');
+        e.preventDefault();
+    }
+});
 </script>
-</body>
-</html>
 
-<div class="footer">
-    <?php include __DIR__ . '/../../public/css/layouts/footer.php'; ?>
-</div>
-
-<style scoped>
-    .cadastro-container{
+<style>
+    .cadastro-container {
         margin: 100px auto;
-        padding: 20px;
-       width: 100%;
-       max-width: 440px;
-       background: var(--surface);
-       border: 1px solid var(--border);
-       border-radius: var(--radius-xl);
-       padding: 2.5rem 2rem;
-       box-shadow: 0 8px 32px var(--shadow-md)
+        width: 100%;
+        max-width: 440px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem 2rem;
+        box-shadow: 0 8px 32px var(--shadow-md);
     }
 </style>
+
+<?php include __DIR__ . '/../../public/layouts/footer.php'; ?>
+<!-- CORRIGIDO: footer agora fecha </body> e </html> corretamente -->
+<!-- CORRIGIDO: caminhos atualizados de css/layouts/ para public/ -->
