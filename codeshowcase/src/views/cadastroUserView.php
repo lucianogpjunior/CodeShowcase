@@ -16,7 +16,7 @@ include __DIR__ . '/../../public/BaseLayout.php';
     <div class="cadastro-container">
         <h1>Cadastrar</h1>
 
-        <form action="/create-user" method="POST">
+        <form action="/cadastro-user" method="POST">
 
             <div class="input-group">
                 <label for="nome">Nome:</label>

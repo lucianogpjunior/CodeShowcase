@@ -5,6 +5,11 @@ use App\models\UserEntity;
 use App\dao\UserDAO;
 
 class UserController {
+    //metodos de view para usuarios
+    public function cadastroView(){
+        require __DIR__ . '/../views/cadastroUserView.php';
+    }
+    //metodos de Usuario
     public function createUser(){
 
         $nome = trim($_POST['nome'] ?? '');
