@@ -1,4 +1,5 @@
 <?php
+// BaseLayout abre <html>, <head> e <body>
 require_once __DIR__ . '/../../public/BaseLayout.php';
 ?>
 
