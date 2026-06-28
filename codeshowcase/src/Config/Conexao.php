@@ -12,7 +12,7 @@ class Conexao {
       if (self::$instancia === null) {
         try {
           self::$instancia = new PDO(
-            "mysql:host=localhost;dbname=code_showcase_db;charset=utf8",
+            "mysql:host=127.0.0.1;dbname=code_showcase_db;charset=utf8",
             "root",
             ""
           );

@@ -2,13 +2,14 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Controller\HomeController;
-use App\Controller\UserController;
+use App\controller\HomeController;
+use App\controller\UserController;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 switch ($uri) {
 //Pages
+    case '/':
     case '/home':
         $controller = new HomeController();
         $controller->index();

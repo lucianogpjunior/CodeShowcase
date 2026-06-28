@@ -1,9 +1,9 @@
 <?php
 
-namespace App\DAO;
+namespace App\dao;
 
 use App\Config\Conexao;
-use App\Models\UserEntity;
+use App\models\UserEntity;
 
 class UserDAO {
   private $conn;

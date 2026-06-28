@@ -1,8 +1,8 @@
 <?php
-namespace App\Controller;
+namespace App\controller;
 
-use App\Models\UserEntity;
-use App\DAO\UserDAO;
+use App\models\UserEntity;
+use App\dao\UserDAO;
 
 class UserController {
     public function createUser(){
