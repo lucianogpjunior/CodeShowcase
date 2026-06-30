@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
         <p>Uma plataforma para desenvolvedores descobrirem projetos, tutoriais e recursos de qualidade.</p>
         <div class="hero-actions">
             <a href="/cadastro" class="btn btn-accent">Criar conta</a>
-            <a href="#" class="btn btn-outline">Ver projetos →</a>
+            <a href="/projetos" class="btn btn-outline">Ver projetos →</a>
         </div>
     </div>
 
@@ -20,7 +20,7 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
             <span class="card-icon">projetos</span>
             <h2>Projetos Recentes</h2>
             <p>Confira os nossos projetos mais recentes e inovadores.</p>
-            <a href="#">Ver Projetos</a>
+            <a href="/ProjectView.php">Ver Projetos</a>
         </div>
         <div class="card">
             <span class="card-icon">tutoriais</span>

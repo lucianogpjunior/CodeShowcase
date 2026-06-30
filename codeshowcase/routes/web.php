@@ -3,6 +3,7 @@
 // CORRIGIDO: namespaces padronizados para PascalCase (PSR-4)
 use App\Controller\HomeController;
 use App\Controller\UserController;
+use App\Controller\ProjectController;
 
 $router->get(
     '/',
@@ -25,5 +26,54 @@ $router->get(
     [
         UserController::class,
         'cadastroView'
+    ]
+);
+// Listagem pública
+$router->get(
+    '/projetos', 
+    [
+        ProjectController::class,
+         'index'
+    ]
+);
+ 
+// Cadastro
+$router->get(
+    '/projetos/cadastro',
+     [
+        ProjectController::class,
+         'cadastroView'
+    ]
+);
+$router->post(
+    '/projetos/cadastrar',
+     [
+        ProjectController::class,
+         'createProject'
+    ]
+);
+ 
+// Edição
+$router->get(
+    '/projetos/editar',
+     [
+        ProjectController::class,
+         'editView'
+    ]
+);
+$router->post(
+    '/projetos/atualizar',
+     [
+        ProjectController::class,
+         'updateProject'
+    ]
+);
+ 
+// Deleção
+$router->get(
+    '/projetos/deletar',
+     [
+        ProjectController::class,
+         'deleteProject'
     ]
 );
