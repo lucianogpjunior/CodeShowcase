@@ -30,10 +30,13 @@
             </div>
 
             <form action="/projetos/atualizar" method="POST" enctype="multipart/form-data">
+
+                <!-- ESSENCIAL: envia o ID para o controller saber qual projeto atualizar -->
                 <input type="hidden" name="id" value="<?= $project->getId() ?>">
 
                 <div class="input-group">
                     <label>Nome do projeto</label>
+                    <!-- value preenchido com dado atual do projeto -->
                     <input type="text" name="nome_projeto"
                            value="<?= htmlspecialchars($project->getNomeProjeto()) ?>" required>
                 </div>
@@ -41,6 +44,7 @@
                 <div class="form-row">
                     <div class="input-group">
                         <label>Preço (R$)</label>
+                        <!-- value preenchido com dado atual do projeto -->
                         <input type="number" name="preco_projeto"
                                value="<?= $project->getPrecoProjeto() ?>"
                                min="0" step="0.01" required>
@@ -52,13 +56,14 @@
                             <?php foreach ($categorias as $cat): ?>
                                 <option value="<?= $cat['id'] ?>"
                                     <?= $cat['id'] == $project->getCategoriaId() ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cat['nome_categoria']) ?>
+                                    <?= htmlspecialchars($cat['categoria_nome']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                 </div>
 
+                <!-- Mostra imagem atual se existir -->
                 <?php if ($project->getUrl()): ?>
                     <div class="input-group">
                         <label>Imagem atual</label>
@@ -70,6 +75,7 @@
 
                 <div class="input-group">
                     <label>Nova imagem (opcional)</label>
+                    <!-- Não obrigatório — só substitui se enviar um novo arquivo -->
                     <input type="file" name="url" accept="image/jpeg,image/png,image/webp,image/gif">
                 </div>
 
@@ -78,7 +84,7 @@
                            <?= $project->getAtivo() ? 'checked' : '' ?>
                            style="width:16px; height:16px; accent-color:var(--accent);">
                     <label for="ativo" style="text-transform:none; font-size:14px; color:var(--muted);">
-                        Projeto ativo
+                        Projeto ativo (visível na listagem)
                     </label>
                 </div>
 

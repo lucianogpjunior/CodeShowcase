@@ -48,7 +48,7 @@
                             <option value="">Selecione...</option>
                             <?php foreach ($categorias as $cat): ?>
                                 <option value="<?= $cat['id'] ?>">
-                                    <?= htmlspecialchars($cat['nome_categoria']) ?>
+                                    <?= htmlspecialchars($cat['categoria_nome']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

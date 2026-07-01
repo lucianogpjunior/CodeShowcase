@@ -20,7 +20,7 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
             <span class="card-icon">projetos</span>
             <h2>Projetos Recentes</h2>
             <p>Confira os nossos projetos mais recentes e inovadores.</p>
-            <a href="/ProjectView.php">Ver Projetos</a>
+            <a href="/projetos">Ver Projetos</a>
         </div>
         <div class="card">
             <span class="card-icon">tutoriais</span>

@@ -9,21 +9,18 @@ class ProjectController {
 
     // ── Views ────────────────────────────────────────────────
 
-    // Lista todos os projetos ativos (página pública)
     public function index() {
         $dao      = new ProjectDAO();
         $projects = $dao->readAtivos();
-        require __DIR__ . '/../views/projectsView.php';
+        require __DIR__ . '/../views/ProjectView.php';
     }
 
-    // Formulário de cadastro
     public function cadastroView() {
         $dao        = new ProjectDAO();
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/cadastroProjectView.php';
+        require __DIR__ . '/../views/CadastroProjectView.php';
     }
 
-    // Formulário de edição
     public function editView() {
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /projetos');
@@ -39,22 +36,21 @@ class ProjectController {
         }
 
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/editProjectView.php';
+        require __DIR__ . '/../views/EditProjectView.php';
     }
 
     // ── CRUD ─────────────────────────────────────────────────
 
     public function createProject() {
-        $nomeProjeto   = trim($_POST['nome_projeto'] ?? '');
-        $precoProjeto  = $_POST['preco_projeto'] ?? '';
-        $categoriaId   = $_POST['categoria_id'] ?? '';
-        $ativo         = isset($_POST['ativo']) ? 1 : 0;
+        $nomeProjeto  = trim($_POST['nome_projeto'] ?? '');
+        $precoProjeto = $_POST['preco_projeto'] ?? '';
+        $categoriaId  = $_POST['categoria_id'] ?? '';
+        $ativo        = isset($_POST['ativo']) ? 1 : 0;
 
         if (empty($nomeProjeto) || $precoProjeto === '' || empty($categoriaId)) {
             die("Todos os campos obrigatórios devem ser preenchidos.");
         }
 
-        // Upload de imagem
         $url = '';
         if (isset($_FILES['url']) && $_FILES['url']['error'] === UPLOAD_ERR_OK) {
             $url = $this->handleUpload($_FILES['url']);
@@ -63,7 +59,7 @@ class ProjectController {
 
         $project = new ProjectEntity(
             null,
-            null,                       // UUID gerado pelo banco
+            null,
             $url,
             $nomeProjeto,
             (float) $precoProjeto,
@@ -97,7 +93,6 @@ class ProjectController {
         $project->setCategoriaId((int) ($_POST['categoria_id'] ?? 0));
         $project->setAtivo(isset($_POST['ativo']) ? 1 : 0);
 
-        // Novo upload só se enviado
         if (isset($_FILES['url']) && $_FILES['url']['error'] === UPLOAD_ERR_OK) {
             $url = $this->handleUpload($_FILES['url']);
             if ($url) $project->setUrl($url);
@@ -122,22 +117,21 @@ class ProjectController {
         exit;
     }
 
-    // ── Helpers ──────────────────────────────────────────────
+    // ── Helper de upload ─────────────────────────────────────
 
     private function handleUpload(array $file): string|false {
-        $uploadDir   = __DIR__ . '/../../public/assets/uploads/';
+        $uploadDir    = __DIR__ . '/../../public/assets/uploads/';
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
         if (!in_array($file['type'], $allowedTypes)) return false;
-        if ($file['size'] > 5 * 1024 * 1024) return false; // 5MB máx
+        if ($file['size'] > 5 * 1024 * 1024) return false;
 
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
         $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = uniqid('proj_', true) . '.' . $ext;
-        $dest     = $uploadDir . $filename;
 
-        if (!move_uploaded_file($file['tmp_name'], $dest)) return false;
+        if (!move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) return false;
 
         return '/assets/uploads/' . $filename;
     }
