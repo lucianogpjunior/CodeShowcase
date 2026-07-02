@@ -106,6 +106,12 @@ class ProjectDAO {
         return $stmt->execute([$id]);
     }
 
+    public function desativar(int $id): bool{
+        $sql = "UPDATE projetos SET ativo = 0 WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$id]);
+    }
+
     // Busca categorias para o <select>
     public function getCategorias(): array {
         $sql  = "SELECT id, categoria_nome FROM categorias ORDER BY categoria_nome";

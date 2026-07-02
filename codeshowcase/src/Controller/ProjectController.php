@@ -117,6 +117,21 @@ class ProjectController {
         exit;
     }
 
+
+    public function desativarProject() {
+        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $dao = new ProjectDAO();
+        $dao->desativar((int) $_GET['id']);
+
+        header('Location: /projetos');
+        exit;
+    }
+
+
     // ── Helper de upload ─────────────────────────────────────
 
     private function handleUpload(array $file): string|false {

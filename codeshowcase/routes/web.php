@@ -77,3 +77,11 @@ $router->get(
          'deleteProject'
     ]
 );
+
+$router->get(
+    '/projetos/desativar',
+     [
+        ProjectController::class,
+         'desativarProject'
+    ]
+);
