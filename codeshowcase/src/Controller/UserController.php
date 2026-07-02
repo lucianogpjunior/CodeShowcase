@@ -1,6 +1,5 @@
 <?php
 
-// CORRIGIDO: namespaces padronizados para PascalCase (PSR-4)
 namespace App\Controller;
 
 use App\Models\UserEntity;
@@ -12,7 +11,7 @@ class UserController {
 
     // Métodos de view
     public function cadastroView() {
-        require __DIR__ . '/../views/cadastroUserView.php';
+        require __DIR__ . '/../Views/cadastroUserView.php';
     }
 
     // Métodos de usuário
