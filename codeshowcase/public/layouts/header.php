@@ -6,7 +6,7 @@
     <div class="nav-links" id="menu">
         <a href="/home">Home</a>
         <a href="#">Recursos</a>
-        <a href="#">Projetos</a>
+        <a href="/projetos">Projetos</a>
         <a href="#">Tutoriais</a>
     </div>
 

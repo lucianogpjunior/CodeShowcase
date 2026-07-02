@@ -7,16 +7,16 @@
 
         <div class="footer-links">
             <h3>Links</h3>
-            <a href="#">Home</a>
-            <a href="#">Projetos</a>
-            <a href="#">Contato</a>
+            <a href="/home">Home</a>
+            <a href="/projetos">Projetos</a>
+            <a href="">Contato</a>
         </div>
 
         <div class="footer-social">
             <h3>Redes</h3>
-            <a href="#">GitHub</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Instagram</a>
+            <a href="https://github.com/Emanuelcds">GitHub</a>
+            <a href="https://www.linkedin.com/in/emanuel-cardoso-263002388/">LinkedIn</a>
+            <a href="https://www.instagram.com/emanuel.cds4/">Instagram</a>
         </div>
     </div>
 
