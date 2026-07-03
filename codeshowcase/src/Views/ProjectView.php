@@ -268,7 +268,7 @@
             <div class="modal-actions">
                 <a id="modalBtnComprar" href="/projetos/comprar" class="btn btn-accent">Comprar</a>
                 <a id="modalBtnEditar" href="/projetos/editar" class="btn btn-outline">Editar projeto</a>
-                <a id="modalBtnDesativar" href"/projetos/desativar"
+                <a id="modalBtnDesativar" href="/projetos/desativar"
                    class="btn btn-outline"
                    style="color:#F87171; border-color:rgba(248,113,113,0.3);"
                    onclick="return confirm('Tem certeza que deseja desativar este projeto?')">
@@ -280,7 +280,7 @@
 </div>
 
 <script>
-function abrirModal(nome, url, categoria, preco, status, uuid) {
+function abrirModal(nome, url, categoria, preco, status, uuid, id) {
     const imgContainer = document.getElementById('modalImageContainer');
     if (url) {
         imgContainer.innerHTML = '<img src="' + url + '" alt="' + nome + '" class="modal-image">';
