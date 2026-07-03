@@ -32,7 +32,7 @@
             <form action="/projetos/atualizar" method="POST" enctype="multipart/form-data">
 
                 <!-- ESSENCIAL: envia o ID para o controller saber qual projeto atualizar -->
-                <input type="hidden" name="id" value="<?= $project->getId() ?>">
+                <input type="hidden" name="uuid" value="<?= $project->getUuid() ?>">
 
                 <div class="input-group">
                     <label>Nome do projeto</label>
