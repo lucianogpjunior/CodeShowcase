@@ -38,56 +38,58 @@ class ProjectDAO {
 
     // READ por ID
     public function read(int $id): ?ProjectEntity {
-        $sql  = "SELECT * FROM projetos WHERE id = ?";
+        $sql  = "SELECT p.*, c.categoria_nome
+                 FROM projetos p
+                 LEFT JOIN categorias c ON p.categoria_id = c.id
+                 WHERE p.id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
         $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$dados) return null;
-
         return $this->hydrate($dados);
     }
 
-    // READ por UUID
+    // READ por UUID — usado nas rotas de editar/desativar
     public function readByUuid(string $uuid): ?ProjectEntity {
-        $sql  = "SELECT * FROM projetos WHERE uuid_projetos = ?";
+        $sql  = "SELECT p.*, c.categoria_nome
+                 FROM projetos p
+                 LEFT JOIN categorias c ON p.categoria_id = c.id
+                 WHERE p.uuid_projetos = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$uuid]);
         $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$dados) return null;
-
         return $this->hydrate($dados);
     }
 
     // READ ALL com nome da categoria
     public function readAll(): array {
-        $sql = "SELECT p.*, c.categoria_nome
-                FROM projetos p
-                LEFT JOIN categorias c ON p.categoria_id = c.id
-                ORDER BY p.nome_projeto";
-
+        $sql  = "SELECT p.*, c.categoria_nome
+                 FROM projetos p
+                 LEFT JOIN categorias c ON p.categoria_id = c.id
+                 ORDER BY p.nome_projeto";
         $stmt = $this->conn->query($sql);
         return $this->hydrateAll($stmt);
     }
 
     // READ somente ativos
     public function readAtivos(): array {
-        $sql = "SELECT p.*, c.categoria_nome
-                FROM projetos p
-                LEFT JOIN categorias c ON p.categoria_id = c.id
-                WHERE p.ativo = 1
-                ORDER BY p.nome_projeto";
-
+        $sql  = "SELECT p.*, c.categoria_nome
+                 FROM projetos p
+                 LEFT JOIN categorias c ON p.categoria_id = c.id
+                 WHERE p.ativo = 1
+                 ORDER BY p.nome_projeto";
         $stmt = $this->conn->query($sql);
         return $this->hydrateAll($stmt);
     }
 
-    // UPDATE
+    // UPDATE — busca pelo UUID, atualiza pelo ID interno
     public function update(ProjectEntity $project): bool {
         $sql  = "UPDATE projetos
                  SET url_projeto = ?, nome_projeto = ?, preco_projeto = ?, categoria_id = ?, ativo = ?
-                 WHERE id = ?";
+                 WHERE uuid_projetos = ?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([
             $project->getUrl(),
@@ -95,21 +97,22 @@ class ProjectDAO {
             $project->getPrecoProjeto(),
             $project->getCategoriaId(),
             $project->getAtivo() ? 1 : 0,
-            $project->getId()
+            $project->getUuid()
         ]);
     }
 
-    // DELETE
-    public function delete(int $id): bool {
-        $sql  = "DELETE FROM projetos WHERE id = ?";
+    // DESATIVAR — usa UUID para não expor ID numérico
+    public function desativar(string $uuid): bool {
+        $sql  = "UPDATE projetos SET ativo = 0 WHERE uuid_projetos = ?";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$id]);
+        return $stmt->execute([$uuid]);
     }
 
-    public function desativar(int $id): bool{
-        $sql = "UPDATE projetos SET ativo = 0 WHERE id = ?";
+    // DELETE — uso interno, recebe UUID
+    public function delete(string $uuid): bool {
+        $sql  = "DELETE FROM projetos WHERE uuid_projetos = ?";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$id]);
+        return $stmt->execute([$uuid]);
     }
 
     // Busca categorias para o <select>
@@ -121,7 +124,6 @@ class ProjectDAO {
 
     // ── Helpers ──────────────────────────────────────────────
 
-    // Monta um ProjectEntity a partir de uma linha do banco
     private function hydrate(array $dados): ProjectEntity {
         $project = new ProjectEntity(
             $dados['id'],
@@ -136,7 +138,6 @@ class ProjectDAO {
         return $project;
     }
 
-    // Itera statement e retorna array de ProjectEntity
     private function hydrateAll($stmt): array {
         $projects = [];
         while ($dados = $stmt->fetch(\PDO::FETCH_ASSOC)) {

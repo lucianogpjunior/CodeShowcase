@@ -21,14 +21,15 @@ class ProjectController {
         require __DIR__ . '/../views/CadastroProjectView.php';
     }
 
+    // UUID na URL — impossível de adivinhar
     public function editView() {
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        if (empty($_GET['uuid'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao     = new ProjectDAO();
-        $project = $dao->read((int) $_GET['id']);
+        $project = $dao->readByUuid($_GET['uuid']);
 
         if (!$project) {
             header('Location: /projetos');
@@ -58,9 +59,7 @@ class ProjectController {
         }
 
         $project = new ProjectEntity(
-            null,
-            null,
-            $url,
+            null, null, $url,
             $nomeProjeto,
             (float) $precoProjeto,
             (int) $categoriaId,
@@ -74,14 +73,15 @@ class ProjectController {
         exit;
     }
 
+    // UUID via hidden input no form — nunca ID numérico
     public function updateProject() {
-        if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {
+        if (empty($_POST['uuid'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao     = new ProjectDAO();
-        $project = $dao->read((int) $_POST['id']);
+        $project = $dao->readByUuid($_POST['uuid']);
 
         if (!$project) {
             header('Location: /projetos');
@@ -104,33 +104,19 @@ class ProjectController {
         exit;
     }
 
-    public function deleteProject() {
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-            header('Location: /projetos');
-            exit;
-        }
-
-        $dao = new ProjectDAO();
-        $dao->delete((int) $_GET['id']);
-
-        header('Location: /projetos');
-        exit;
-    }
-
-
+    // UUID na URL — desativa sem expor ID
     public function desativarProject() {
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        if (empty($_GET['uuid'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao = new ProjectDAO();
-        $dao->desativar((int) $_GET['id']);
+        $dao->desativar($_GET['uuid']);
 
         header('Location: /projetos');
         exit;
     }
-
 
     // ── Helper de upload ─────────────────────────────────────
 
