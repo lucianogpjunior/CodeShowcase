@@ -85,3 +85,19 @@ $router->get(
          'desativarProject'
     ]
 );
+
+$router->get(
+    '/projetos/comprar',
+    [
+        ProjectController::class,
+        'comprarView'
+    ]
+);
+
+$router->get(
+    '/comprar/sucesso',
+    [
+        ProjectController::class,
+        'sucessoView'
+    ]
+);
