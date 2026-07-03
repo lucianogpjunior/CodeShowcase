@@ -35,12 +35,13 @@
                     </p>
 
                     <div style="display: flex; gap: 8px; margin-top: 0.75rem;">
+                        <a href="/projetos/comprar?id=<?= $project->getId() ?>" class="btn btn-accent" style="padding: 6px 14px; font-size: 13px;">
+                            Comprar
+                        </a>
                         <a href="/projetos/editar?id=<?= $project->getId() ?>" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">
                             Editar
                         </a>
-                        <a href="/projetos/desativar?id=<?= $project->getId() ?>"
-                           class="btn btn-outline"
-                           style="padding: 6px 14px; font-size: 13px; color: #F87171; border-color: rgba(248,113,113,0.3);"
+                        <a href="/projetos/desativar?id=<?= $project->getId() ?>" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; color: #F87171; border-color: rgba(248,113,113,0.3);"
                            onclick="return confirm('Tem certeza que deseja desativar este projeto?')">
                             Desativar
                         </a>
