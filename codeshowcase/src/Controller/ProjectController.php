@@ -40,6 +40,29 @@ class ProjectController {
         require __DIR__ . '/../views/EditProjectView.php';
     }
 
+    public function comprarView() {
+        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $dao = new ProjectDAO();
+        $project = $dao->read((int) $_GET['id']);
+
+
+        if (!$project) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        require __DIR__ . '/../views/ComprarProjectView.php';
+    }
+
+    public function sucessoView() {
+        require __DIR__ . '/../views/SucessoView.php';
+    }
+    
+
     // ── CRUD ─────────────────────────────────────────────────
 
     public function createProject() {
