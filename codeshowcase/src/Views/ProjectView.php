@@ -208,7 +208,8 @@
                         <?= json_encode($project->nomeCategoria ?? "—") ?>,
                         <?= json_encode(number_format($project->getPrecoProjeto(), 2, ",", ".")) ?>,
                         <?= json_encode($project->getAtivo() ? "ativo" : "inativo") ?>,
-                        <?= json_encode($project->getUuid()) ?>
+                        <?= json_encode($project->getUuid()) ?>,
+                        <?= json_encode($project->getId()) ?>
                      )'>
 
                     <?php if ($project->getUrl()): ?>
@@ -264,7 +265,8 @@
             </div>
 
             <div class="modal-actions">
-                <a id="modalBtnEditar" href="#" class="btn btn-accent">Editar projeto</a>
+                <a id="modalBtnComprar" href="#" class="btn btn-accent">Comprar</a>
+                <a id="modalBtnEditar" href="#" class="btn btn-outline">Editar projeto</a>
                 <a id="modalBtnDesativar" href="#"
                    class="btn btn-outline"
                    style="color:#F87171; border-color:rgba(248,113,113,0.3);"
@@ -277,7 +279,7 @@
 </div>
 
 <script>
-function abrirModal(nome, url, categoria, preco, status, uuid) {
+function abrirModal(nome, url, categoria, preco, status, uuid, id) {
     const imgContainer = document.getElementById('modalImageContainer');
     if (url) {
         imgContainer.innerHTML = '<img src="' + url + '" alt="' + nome + '" class="modal-image">';
@@ -291,11 +293,12 @@ function abrirModal(nome, url, categoria, preco, status, uuid) {
     document.getElementById('modalPreco').textContent         = 'R$ ' + preco;
     document.getElementById('modalUuid').textContent          = uuid;
 
-    // CORRIGIDO: faltava espaço entre 'modal-status ' e 'inativo'
     var statusEl = document.getElementById('modalStatus');
     statusEl.textContent = status === 'ativo' ? 'Ativo' : 'Inativo';
     statusEl.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
 
+    // OBS: comprarView() hoje espera "id" numérico (via $_GET['id']), não uuid.
+    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + id;
     document.getElementById('modalBtnEditar').href    = '/projetos/editar?uuid=' + uuid;
     document.getElementById('modalBtnDesativar').href = '/projetos/desativar?uuid=' + uuid;
 
@@ -305,7 +308,6 @@ function abrirModal(nome, url, categoria, preco, status, uuid) {
 
 function fecharModal() {
     document.getElementById('modalOverlay').classList.remove('open');
-    // CORRIGIDO: era - '' (subtração) em vez de = '' (atribuição)
     document.body.style.overflow = '';
 }
 
