@@ -91,6 +91,66 @@ document.querySelector('form').addEventListener('submit', function (e) {
         e.preventDefault();
     }
 });
+
+function validarNome(nome) {
+    const regex = /^[A-Za-zÀ-ÿ\s]+$/;
+    return regex.test(nome);
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    const nomeInput = document.getElementById('idnome');
+    const nome = nomeInput.value;
+
+    if (!validarNome(nome)) {
+        alert('Nome inválido! Apenas letras e espaços são permitidos.');
+        e.preventDefault();
+    }
+});
+
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$;
+    return regex.test(email);
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    const emailInput = document.getElementById('idemail');
+    const email = emailInput.value;
+
+    if (!validarEmail(email)) {
+        alert('Email inválido!')
+        e.preventDefault();
+    }
+});
+
+function validarDataNascimento(data) {
+    const hoje = new Date();
+    const dataNascimento = new Date(data);
+    return dataNascimento < hoje;
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    const dtNascimentoInput = document.getElementById('iddtNascimento');
+    const dtNascimento = dtNascimentoInput.value;
+
+    if (!validarDataNascimento(dtNascimento)) {
+        alert('Data de nascimento inválida! Deve ser uma data no passado.');
+        e.preventDefault();
+    }
+});
+
+function validarSenha(senha) {
+    return senha.length >= 6;
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    const senhaInput = document.getElementById('idsenha');
+    const senha = senhaInput.value;
+
+    if(!validarSenha(senha)){
+        alert('Senha inválida! Deve ter pelo menos 6 caracteres.');
+        e.preventDefault();
+    }
+})
 </script>
 
 <style>
@@ -107,5 +167,3 @@ document.querySelector('form').addEventListener('submit', function (e) {
 </style>
 
 <?php include __DIR__ . '/../../public/layouts/footer.php'; ?>
-<!-- CORRIGIDO: footer agora fecha </body> e </html> corretamente -->
-<!-- CORRIGIDO: caminhos atualizados de css/layouts/ para public/ -->

@@ -78,5 +78,32 @@
         </div>
     </div>
 </main>
+<script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        const precoInput = form.querySelector('input[name="preco_projeto"]');
+        const precoValue = parseFloat(precoInput.value);
+
+        if (isNam(e(precoValue) || precoValue < 0)) {
+            event.preventDefault();
+            alert('O preço do projeto deve ser um número positivo.');
+        }
+    })
+
+    function validarNome(nome) {
+        const regex = /^[A-Za-zÀ-ÿ0-9\s.,'-]+$/;
+        return regex.test(nome);
+    }
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const nomeInput = document.querySelector('input[name="nome_projeto"]');
+        const nome = nomeInput.value;
+
+         if (!validarNome(nome)) {
+            alert('Nome do projeto inválido! Use apenas letras, números e caracteres especiais básicos.');
+            e.preventDefault();
+         }
+    })
+</script>
 
 <?php include __DIR__ . '/../../public/layouts/footer.php'; ?>
