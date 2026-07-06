@@ -299,8 +299,8 @@ function abrirModal(nome, url, categoria, preco, status, uuid, id) {
     statusEl.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
 
 
-    // OBS: comprarView() hoje espera "id" numérico (via $_GET['id']), não uuid.
-    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + id;
+
+    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?uuid=' + id;
     document.getElementById('modalBtnEditar').href    = '/projetos/editar?uuid=' + uuid;
     document.getElementById('modalBtnDesativar').href = '/projetos/desativar?uuid=' + uuid;
 
