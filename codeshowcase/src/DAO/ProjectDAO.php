@@ -122,6 +122,8 @@ class ProjectDAO {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    
+
     // ── Helpers ──────────────────────────────────────────────
 
     private function hydrate(array $dados): ProjectEntity {

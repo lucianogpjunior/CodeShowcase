@@ -59,24 +59,27 @@ class ProjectController {
     }
     
 public function pagamentoView() {
-        if (!isset($_GET['uuid'])) {
-            header('Location: /projetos');
-            exit;
-        }
-
-        $dao = new ProjectDAO();
-        $project = $dao->read((int) $_GET['uuid']);
-
-        if (!$project) {
-            header('Location: /projetos');
-            exit;
-        }
-
-        require __DIR__ . '/../views/PagamentoProjectView.php';
+    if (!isset($_GET['uuid'])) {
+        header('Location: /projetos');
+        exit;
     }
 
+    $dao = new ProjectDAO();
+    $project = $dao->readByUuid($_GET['uuid']);
+
+    if (!$project) {
+        header('Location: /projetos');
+        exit;
+    }
+
+    // 🔥 Busca TODAS as categorias (você já tem esse método)
+    $categorias = $dao->getCategorias();
+
+    // Passa as duas variáveis para a view
+    require __DIR__ . '/../views/PagamentoProjectView.php';
+}
 public function processarPagamento() {
-    // Iniciar sessão para mensagens de erro
+    // Iniciar sessão
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -87,41 +90,24 @@ public function processarPagamento() {
         exit;
     }
 
+    // Pega os dados
     $uuid = $_POST['uuid'] ?? '';
+    $metodo = $_POST['metodo'] ?? 'cartao';
 
-    // Validação simples: todos os campos devem estar preenchidos
-    $cartao  = trim($_POST['cartao'] ?? '');
-    $validade = trim($_POST['validade'] ?? '');
-    $cvv     = trim($_POST['cvv'] ?? '');
+    // Validação do cartão (só se for cartão)
+    if ($metodo === 'cartao') {
+        $cartao  = trim($_POST['cartao'] ?? '');
+        $validade = trim($_POST['validade'] ?? '');
+        $cvv     = trim($_POST['cvv'] ?? '');
 
-    if (empty($cartao) || empty($validade) || empty($cvv)) {
-        $_SESSION['erro_pagamento'] = 'Preencha todos os dados do cartão.';
-        header('Location: /pagamento?uuid=' . urlencode($uuid));
-        exit;
+        if (empty($cartao) || empty($validade) || empty($cvv)) {
+            $_SESSION['erro_pagamento'] = 'Preencha todos os dados do cartão.';
+            header('Location: /projetos/pagamento?uuid=' . urlencode($uuid));
+            exit;
+        }
     }
 
-    // (Opcional) validação mais específica
-    // Número deve ter 16 dígitos (sem espaços)
-    $cartaoLimpo = preg_replace('/\s/', '', $cartao);
-    if (!preg_match('/^\d{16}$/', $cartaoLimpo)) {
-        $_SESSION['erro_pagamento'] = 'Número de cartão inválido (16 dígitos).';
-        header('Location: /pagamento?uuid=' . urlencode($uuid));
-        exit;
-    }
-    if (!preg_match('/^\d{2}\/\d{2}$/', $validade)) {
-        $_SESSION['erro_pagamento'] = 'Validade inválida (MM/AA).';
-        header('Location: /pagamento?uuid=' . urlencode($uuid));
-        exit;
-    }
-    if (!preg_match('/^\d{3,4}$/', $cvv)) {
-        $_SESSION['erro_pagamento'] = 'CVV inválido (3 ou 4 dígitos).';
-        header('Location: /pagamento?uuid=' . urlencode($uuid));
-        exit;
-    }
-
-    // --- SIMULAÇÃO DE PAGAMENTO APROVADO ---
-    // Redireciona para sucesso
-    header('Location: /projetos/pagamento?uuid=' . urlencode($uuid));
+    header('Location: /comprar/sucesso');
     exit;
 }
 
