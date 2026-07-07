@@ -17,13 +17,15 @@ class UserController {
     // Métodos de usuário
     public function createUser() {
 
-        $nome        = trim($_POST['nome'] ?? '');
-        $email       = trim($_POST['email'] ?? '');
+        $nomeUsuario  = trim($_POST['nome_usuario'] ?? '');
+        $nome         = trim($_POST['nome'] ?? '');
+        $email        = trim($_POST['email'] ?? '');
         $dtNascimento = $_POST['dtNascimento'] ?? '';
-        $cpf         = $_POST['cpf'] ?? '';
-        $senha       = $_POST['senha'] ?? '';
+        $cpf          = $_POST['cpf'] ?? '';
+        $senha        = $_POST['senha'] ?? '';
 
         if (
+            empty($nomeUsuario) ||
             empty($nome) ||
             empty($email) ||
             empty($dtNascimento) ||
@@ -35,12 +37,14 @@ class UserController {
 
         $user = new UserEntity(
             null,
+            $nomeUsuario,
             $nome,
             $email,
+            $senha,
             $dtNascimento,
             $cpf,
-            $senha,
-            date('Y-m-d H:i:s')
+            date('Y-m-d H:i:s'),
+            true
         );
 
         $userDAO = new UserDAO();

@@ -13,6 +13,11 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
         <form action="/cadastro-user" method="POST">
 
             <div class="input-group">
+                <label for="idnomeUsuario">Nome de usuário:</label>
+                <input id="idnomeUsuario" name="nome_usuario" type="text" required>
+            </div>
+
+            <div class="input-group">
                 <label for="idnome">Nome:</label>
                 <input id="idnome" name="nome" type="text" required>
             </div>
@@ -51,6 +56,7 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
 </main>
 
 <script>
+    /*
 function validarCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
 
@@ -90,7 +96,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
         alert('CPF inválido!');
         e.preventDefault();
     }
-});
+});*/
 </script>
 
 <style>
