@@ -47,13 +47,13 @@ class ProjectController {
     }
 
     public function comprarView() {
-        if (!isset($_GET['uuid'])) {
+        if (!isset($_GET['id'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao = new ProjectDAO();
-        $project = $dao->read((int) $_GET['uuid']);
+        $project = $dao->read((int) $_GET['id']);
 
 
         if (!$project) {
@@ -65,13 +65,13 @@ class ProjectController {
     }
     
 public function pagamentoView() {
-    if (!isset($_GET['uuid'])) {
+    if (!isset($_GET['id'])) {
         header('Location: /projetos');
         exit;
     }
 
     $dao = new ProjectDAO();
-    $project = $dao->readByUuid($_GET['uuid']);
+    $project = $dao->read($_GET['id']);
 
     if (!$project) {
         header('Location: /projetos');
@@ -97,7 +97,7 @@ public function processarPagamento() {
     }
 
     // Pega os dados
-    $uuid = $_POST['uuid'] ?? '';
+    $uuid = $_POST['id'] ?? '';
     $metodo = $_POST['metodo'] ?? 'cartao';
 
     // Validação do cartão (só se for cartão)
@@ -108,7 +108,7 @@ public function processarPagamento() {
 
         if (empty($cartao) || empty($validade) || empty($cvv)) {
             $_SESSION['erro_pagamento'] = 'Preencha todos os dados do cartão.';
-            header('Location: /projetos/pagamento?uuid=' . urlencode($uuid));
+            header('Location: /projetos/pagamento?id=' . urlencode($id));
             exit;
         }
     }

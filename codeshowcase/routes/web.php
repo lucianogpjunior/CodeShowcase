@@ -45,6 +45,14 @@ $router->get(
     ]
 );
 
+$router->post(
+    '/dev/cadastro',
+    [
+        UserController::class,
+        'createDev'
+    ]
+);
+
 // Listagem pública
 $router->get(
     '/projetos', 

@@ -141,30 +141,52 @@ class UserController {
         exit;
     }
 
-    public function createDev() {
-        Security::requireLogin();
+public function createDev() {
+    Security::requireLogin();
 
-        if (!Security::verifyCsrfToken($_POST['csrf_token'] ?? null)) {
-            die('Token CSRF inválido.');
-        }
-
-        $userId = $_SESSION['user']['id'];
-        $devDAO = new UsuarioDevDAO();
-
-        if ($devDAO->readByUsuarioId($userId)) {
-            die('Você já é um desenvolvedor.');
-        }
-
-        $usuarioDev = new UsuarioDevEntity(null, $userId, date('Y-m-d H:i:s'));
-        $devDAO->create($usuarioDev);
-
-        $_SESSION['user']['is_dev'] = true;
-        $_SESSION['user']['role'] = 'DESENVOLVEDOR';
-        $_SESSION['user']['dev_id'] = $usuarioDev->getId();
-
-        header('Location: /home');
+    if (!Security::verifyCsrfToken($_POST['csrf_token'] ?? null)) {
+        header('Location: /dev/cadastro?erro=csrf');
         exit;
     }
+
+    $userId = $_SESSION['user']['id'];
+    $devDAO = new UsuarioDevDAO();
+
+    if ($devDAO->readByUsuarioId($userId)) {
+        header('Location: /home?info=ja_e_dev');
+        exit;
+    }
+
+    $githubUrl = trim($_POST['github_url_perfil'] ?? '');
+    $linkedinUrl = trim($_POST['linkedin_url'] ?? '');
+
+    // Campos opcionais, mas se preenchidos precisam ser URLs válidas
+    if ($githubUrl !== '' && !filter_var($githubUrl, FILTER_VALIDATE_URL)) {
+        header('Location: /dev/cadastro?erro=github_invalido');
+        exit;
+    }
+
+    if ($linkedinUrl !== '' && !filter_var($linkedinUrl, FILTER_VALIDATE_URL)) {
+        header('Location: /dev/cadastro?erro=linkedin_invalido');
+        exit;
+    }
+
+    $usuarioDev = new UsuarioDevEntity(
+        null,
+        $userId,
+        date('Y-m-d H:i:s'),
+        $githubUrl !== '' ? $githubUrl : null,
+        $linkedinUrl !== '' ? $linkedinUrl : null
+    );
+    $devDAO->create($usuarioDev);
+
+    $_SESSION['user']['is_dev'] = true;
+    $_SESSION['user']['role'] = 'DESENVOLVEDOR';
+    $_SESSION['user']['dev_id'] = $usuarioDev->getId();
+
+    header('Location: /home?sucesso=agora_e_dev');
+    exit;
+}
 
     public function deleteUser() {
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
