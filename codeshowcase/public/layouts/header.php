@@ -1,3 +1,4 @@
+<?php \App\Config\Security::initSession(); ?>
 <nav class="navbar">
     <div style="display: flex; align-items: center;">
         <img src="/assets/favicon.ico" class="logo" alt="Logo">
@@ -11,8 +12,13 @@
     </div>
 
     <div class="auth-links">
-        <a href="/login">Login</a>
-        <a href="/cadastro" class="btn-primary">Cadastrar</a>
+        <?php if (App\Config\Security::isLoggedIn()): ?>
+            <a href="/dev/cadastro">Perfil Dev</a>
+            <a href="/logout">Sair</a>
+        <?php else: ?>
+            <a href="/login">Login</a>
+            <a href="/cadastro" class="btn-primary">Cadastrar</a>
+        <?php endif; ?>
     </div>
 
     <div class="navbar-buttons">

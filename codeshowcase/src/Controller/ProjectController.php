@@ -12,24 +12,23 @@ class ProjectController {
     public function index() {
         $dao      = new ProjectDAO();
         $projects = $dao->readAtivos();
-        require __DIR__ . '/../views/ProjectView.php';
+        require __DIR__ . '/../Views/ProjectView.php';
     }
 
     public function cadastroView() {
         $dao        = new ProjectDAO();
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/CadastroProjectView.php';
+        require __DIR__ . '/../Views/CadastroProjectView.php';
     }
 
-    // UUID na URL — impossível de adivinhar
     public function editView() {
-        if (empty($_GET['uuid'])) {
+        if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao     = new ProjectDAO();
-        $project = $dao->readByUuid($_GET['uuid']);
+        $project = $dao->read((int) $_GET['id']);
 
         if (!$project) {
             header('Location: /projetos');
@@ -37,17 +36,17 @@ class ProjectController {
         }
 
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/EditProjectView.php';
+        require __DIR__ . '/../Views/EditProjectView.php';
     }
 
     public function comprarView() {
-        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        if (!isset($_GET['uuid'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao = new ProjectDAO();
-        $project = $dao->read((int) $_GET['id']);
+        $project = $dao->read((int) $_GET['uuid']);
 
 
         if (!$project) {
@@ -55,38 +54,98 @@ class ProjectController {
             exit;
         }
 
-        require __DIR__ . '/../views/ComprarProjectView.php';
-    }
-
-    public function sucessoView() {
-        require __DIR__ . '/../views/SucessoView.php';
+        require __DIR__ . '/../Views/ComprarProjectView.php';
     }
     
+public function pagamentoView() {
+    if (!isset($_GET['uuid'])) {
+        header('Location: /projetos');
+        exit;
+    }
+
+    $dao = new ProjectDAO();
+    $project = $dao->readByUuid($_GET['uuid']);
+
+    if (!$project) {
+        header('Location: /projetos');
+        exit;
+    }
+
+    // 🔥 Busca TODAS as categorias (você já tem esse método)
+    $categorias = $dao->getCategorias();
+
+    // Passa as duas variáveis para a view
+    require __DIR__ . '/../views/PagamentoProjectView.php';
+}
+public function processarPagamento() {
+    // Iniciar sessão
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Verifica se é POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /projetos');
+        exit;
+    }
+
+    // Pega os dados
+    $uuid = $_POST['uuid'] ?? '';
+    $metodo = $_POST['metodo'] ?? 'cartao';
+
+    // Validação do cartão (só se for cartão)
+    if ($metodo === 'cartao') {
+        $cartao  = trim($_POST['cartao'] ?? '');
+        $validade = trim($_POST['validade'] ?? '');
+        $cvv     = trim($_POST['cvv'] ?? '');
+
+        if (empty($cartao) || empty($validade) || empty($cvv)) {
+            $_SESSION['erro_pagamento'] = 'Preencha todos os dados do cartão.';
+            header('Location: /projetos/pagamento?uuid=' . urlencode($uuid));
+            exit;
+        }
+    }
+
+    header('Location: /comprar/sucesso');
+    exit;
+}
+
+    public function sucessoView() {
+        require __DIR__ . '/../Views/SucessoView.php';
+    }
 
     // ── CRUD ─────────────────────────────────────────────────
 
     public function createProject() {
-        $nomeProjeto  = trim($_POST['nome_projeto'] ?? '');
-        $precoProjeto = $_POST['preco_projeto'] ?? '';
+        $nomeProjeto  = trim($_POST['nome'] ?? '');
+        $titulo       = trim($_POST['titulo'] ?? '');
+        $descricao    = trim($_POST['descricao'] ?? '');
+        $url          = trim($_POST['url'] ?? '');
+        $precoProjeto = $_POST['preco'] ?? '';
         $categoriaId  = $_POST['categoria_id'] ?? '';
         $ativo        = isset($_POST['ativo']) ? 1 : 0;
 
-        if (empty($nomeProjeto) || $precoProjeto === '' || empty($categoriaId)) {
+        if (empty($nomeProjeto) || empty($titulo) || empty($descricao) || $precoProjeto === '' || empty($categoriaId)) {
             die("Todos os campos obrigatórios devem ser preenchidos.");
         }
 
-        $url = '';
-        if (isset($_FILES['url']) && $_FILES['url']['error'] === UPLOAD_ERR_OK) {
-            $url = $this->handleUpload($_FILES['url']);
-            if (!$url) die("Erro no upload da imagem.");
+        $imagePath = '';
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $imagePath = $this->handleUpload($_FILES['image']);
+            if (!$imagePath) die("Erro no upload da imagem.");
         }
 
         $project = new ProjectEntity(
-            null, null, $url,
+            null,
+            $url,
+            $imagePath,
             $nomeProjeto,
+            $titulo,
+            $descricao,
             (float) $precoProjeto,
             (int) $categoriaId,
-            $ativo
+            $ativo,
+            1
         );
 
         $dao = new ProjectDAO();
@@ -96,29 +155,32 @@ class ProjectController {
         exit;
     }
 
-    // UUID via hidden input no form — nunca ID numérico
+    // Atualiza o projeto usando o ID numérico enviado pelo formulário
     public function updateProject() {
-        if (empty($_POST['uuid'])) {
+        if (empty($_POST['id']) || !is_numeric($_POST['id'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao     = new ProjectDAO();
-        $project = $dao->readByUuid($_POST['uuid']);
+        $project = $dao->read((int) $_POST['id']);
 
         if (!$project) {
             header('Location: /projetos');
             exit;
         }
 
-        $project->setNomeProjeto(trim($_POST['nome_projeto'] ?? ''));
-        $project->setPrecoProjeto((float) ($_POST['preco_projeto'] ?? 0));
+        $project->setNomeProjeto(trim($_POST['nome'] ?? ''));
+        $project->setTitulo(trim($_POST['titulo'] ?? ''));
+        $project->setDescricao(trim($_POST['descricao'] ?? ''));
+        $project->setUrl(trim($_POST['url'] ?? ''));
+        $project->setPreco((float) ($_POST['preco'] ?? 0));
         $project->setCategoriaId((int) ($_POST['categoria_id'] ?? 0));
         $project->setAtivo(isset($_POST['ativo']) ? 1 : 0);
 
-        if (isset($_FILES['url']) && $_FILES['url']['error'] === UPLOAD_ERR_OK) {
-            $url = $this->handleUpload($_FILES['url']);
-            if ($url) $project->setUrl($url);
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image = $this->handleUpload($_FILES['image']);
+            if ($image) $project->setImage($image);
         }
 
         $dao->update($project);
@@ -127,15 +189,14 @@ class ProjectController {
         exit;
     }
 
-    // UUID na URL — desativa sem expor ID
     public function desativarProject() {
-        if (empty($_GET['uuid'])) {
+        if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao = new ProjectDAO();
-        $dao->desativar($_GET['uuid']);
+        $dao->desativar((int) $_GET['id']);
 
         header('Location: /projetos');
         exit;
