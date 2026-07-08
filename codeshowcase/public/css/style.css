@@ -1073,6 +1073,32 @@ input[type="submit"]:active { transform: translateY(0); }
     margin-bottom: 1.5rem;
 }
 
+/* Garante que o input e a mensagem fiquem empilhados verticalmente */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Oculta as mensagens de erro inicialmente */
+.erro-oculto {
+    display: none;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Exibe a mensagem em vermelho quando a classe 'erro' for adicionada pelo JS */
+.erro {
+    display: block;
+    color: #ff0000;
+}
+
+/* Adiciona uma borda vermelha no input com falha */
+.input-com-erro {
+    border: 2px solid #ff0000;
+}
+
+
 /* Responsivo */
 @media (max-width: 768px) {
     .payment-summary-grid {

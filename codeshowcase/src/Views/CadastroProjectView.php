@@ -34,6 +34,8 @@
                 <div class="input-group">
                     <label>Nome do projeto</label>
                     <input type="text" name="nome" placeholder="Ex: Sistema de Gestão" required>
+                    <!-- MENSAGEM DE ERRO DO NOME -->
+                    <span id="erro-nome" class="erro-oculto">Nome do projeto inválido! Use apenas letras, números e pontuação básica.</span>
                 </div>
 
                 <div class="input-group">
@@ -55,6 +57,8 @@
                     <div class="input-group">
                         <label>Preço (R$)</label>
                         <input type="number" name="preco" placeholder="0.00" min="0" step="0.01" required>
+                        <!-- MENSAGEM DE ERRO DO PREÇO -->
+                        <span id="erro-preco" class="erro-oculto">O projeto pode ser gratuito mas o preço não pode ser menor que zero.</span>
                     </div>
 
                     <div class="input-group">
@@ -94,31 +98,50 @@
     </div>
 </main>
 <script>
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        const precoInput = form.querySelector('input[name="preco_projeto"]');
-        const precoValue = parseFloat(precoInput.value);
+// Função para validar o formato do nome do projeto
+function validarNome(nome) {
+    const regex = /^[A-Za-zÀ-ÿ0-9\s.,'-]+$/;
+    return regex.test(nome);
+}
 
-        if (isNam(e(precoValue) || precoValue < 0)) {
-            event.preventDefault();
-            alert('O preço do projeto deve ser um número positivo.');
-        }
-    })
+// Evento submit único para gerenciar as validações do formulário
+const form = document.querySelector('form');
+form.addEventListener('submit', function(event) {
+    let formularioValido = true;
 
-    function validarNome(nome) {
-        const regex = /^[A-Za-zÀ-ÿ0-9\s.,'-]+$/;
-        return regex.test(nome);
+    // --- VALIDAÇÃO: NOME DO PROJETO ---
+    const nomeInput = form.querySelector('input[name="nome"]');
+    const erroNome = document.getElementById('erro-nome');
+    
+    if (!validarNome(nomeInput.value)) {
+        nomeInput.classList.add('input-com-erro');
+        erroNome.classList.add('erro');
+        formularioValido = false;
+    } else {
+        nomeInput.classList.remove('input-com-erro');
+        erroNome.classList.remove('erro');
     }
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const nomeInput = document.querySelector('input[name="nome_projeto"]');
-        const nome = nomeInput.value;
+    // --- VALIDAÇÃO: PREÇO ---
+    const precoInput = form.querySelector('input[name="preco"]');
+    const erroPreco = document.getElementById('erro-preco');
+    const precoValue = parseFloat(precoInput.value);
 
-         if (!validarNome(nome)) {
-            alert('Nome do projeto inválido! Use apenas letras, números e caracteres especiais básicos.');
-            e.preventDefault();
-         }
-    })
+    // Corrigido 'isNam' para 'isNaN' e sincronizado com o name do HTML
+    if (isNaN(precoValue) || precoValue < 0) {
+        precoInput.classList.add('input-com-erro');
+        erroPreco.classList.add('erro');
+        formularioValido = false;
+    } else {
+        precoInput.classList.remove('input-com-erro');
+        erroPreco.classList.remove('erro');
+    }
+
+    // BLOQUEIO: Cancela o envio se algum campo falhar
+    if (!formularioValido) {
+        event.preventDefault();
+    }
+});
 </script>
 
 <?php include __DIR__ . '/../../public/layouts/footer.php'; ?>

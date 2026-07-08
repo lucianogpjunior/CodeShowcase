@@ -9,22 +9,27 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
     <div class="cadastro-container">
         <h1>Cadastrar</h1>
 
-        <!-- CORRIGIDO: </form> estava faltando -->
         <form action="/cadastro-user" method="POST">
 
             <div class="input-group">
                 <label for="idnome">Nome:</label>
                 <input id="idnome" name="nome" type="text" required>
+                <!-- Mensagem de erro do Nome -->
+                <span id="mensagem-erro" class="erro-oculto">Nome inválido. Use apenas letras.</span>
             </div>
 
             <div class="input-group">
                 <label for="idemail">Email:</label>
                 <input id="idemail" name="email" type="email" required>
+                <!-- Mensagem de erro do Email -->
+                <span id="mensagem-erro-email" class="erro-oculto">Email inválido (ex: usuario@email.com).</span>
             </div>
 
             <div class="input-group">
                 <label for="iddtNascimento">Data de Nascimento:</label>
                 <input id="iddtNascimento" name="dtNascimento" type="date" required>
+                <!-- Mensagem de erro da Data -->
+                <span id="mensagem-erro-data" class="erro-oculto">Data inválida. Não pode ser no futuro nem ter mais de 100 anos.</span>
             </div>
 
             <div class="input-group">
@@ -35,45 +40,48 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
                     name="cpf"
                     maxlength="14"
                     placeholder="000.000.000-00"
+                    required
                 >
+                <!-- Mensagem de erro do CPF -->
+                <span id="mensagem-erro-cpf" class="erro-oculto">CPF inválido. Verifique os números.</span>
             </div>
 
             <div class="input-group">
                 <label for="idsenha">Senha:</label>
                 <input id="idsenha" name="senha" type="password" required>
+                <!-- Mensagem de erro da Senha -->
+                <span id="mensagem-erro-senha" class="erro-oculto">Senha fraca. Deve ter no mínimo 8 caracteres, maiúsculas, minúsculas, números e caractere especial.</span>
             </div>
 
             <button type="submit">Cadastrar</button>
 
         </form>
-        <!-- CORRIGIDO: </form> adicionado -->
     </div>
 </main>
 
 <script>
+// ==========================================
+// 1. FUNÇÕES DE VALIDAÇÃO (LÓGICA)
+// ==========================================
+
 function validarCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
-
     if (cpf.length !== 11) return false;
     if (/^(\d)\1+$/.test(cpf)) return false;
 
     let soma = 0;
     let resto;
-
     for (let i = 1; i <= 9; i++) {
         soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
-
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf.substring(9, 10))) return false;
 
     soma = 0;
-
     for (let i = 1; i <= 10; i++) {
         soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
     }
-
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf.substring(10, 11))) return false;
@@ -81,76 +89,103 @@ function validarCPF(cpf) {
     return true;
 }
 
-document.querySelector('form').addEventListener('submit', function (e) {
-    // CORRIGIDO: cpfInput não estava declarado, causava ReferenceError
-    const cpfInput = document.getElementById('idcpf');
-    const cpf = cpfInput.value;
-
-    if (!validarCPF(cpf)) {
-        alert('CPF inválido!');
-        e.preventDefault();
-    }
-});
-
 function validarNome(nome) {
     const regex = /^[A-Za-zÀ-ÿ\s]+$/;
     return regex.test(nome);
 }
 
-document.querySelector('form').addEventListener('submit', function (e) {
-    const nomeInput = document.getElementById('idnome');
-    const nome = nomeInput.value;
-
-    if (!validarNome(nome)) {
-        alert('Nome inválido! Apenas letras e espaços são permitidos.');
-        e.preventDefault();
-    }
-});
-
 function validarEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
 }
 
-document.querySelector('form').addEventListener('submit', function (e) {
-    const emailInput = document.getElementById('idemail');
-    const email = emailInput.value;
-
-    if (!validarEmail(email)) {
-        alert('Email inválido!')
-        e.preventDefault();
-    }
-});
-
 function validarDataNascimento(data) {
+    if (!data) return false;
     const hoje = new Date();
     const dataNascimento = new Date(data);
-    return dataNascimento < hoje;
+    const dataLimite = new Date();
+    dataLimite.setFullYear(hoje.getFullYear() - 100);
+    return dataNascimento < hoje && dataNascimento >= dataLimite;
 }
 
-document.querySelector('form').addEventListener('submit', function (e) {
-    const dtNascimentoInput = document.getElementById('iddtNascimento');
-    const dtNascimento = dtNascimentoInput.value;
+function validarSenha(senha) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(senha);
+}
 
-    if (!validarDataNascimento(dtNascimento)) {
-        alert('Data de nascimento inválida! Deve ser uma data no passado.');
+// ==========================================
+// 2. EVENTO SUBMIT ÚNICO DO FORMULÁRIO
+// ==========================================
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    // Variável de controle para saber se todo o formulário está correto
+    let formularioValido = true;
+
+    // --- VALIDAÇÃO: NOME ---
+    const nomeInput = document.getElementById('idnome');
+    const mensagemErroNome = document.getElementById('mensagem-erro'); // Mantido ID original
+    if (!validarNome(nomeInput.value)) {
+        nomeInput.classList.add('input-com-erro');
+        mensagemErroNome.classList.add('erro');
+        formularioValido = false;
+    } else {
+        nomeInput.classList.remove('input-com-erro');
+        mensagemErroNome.classList.remove('erro');
+    }
+
+    // --- VALIDAÇÃO: CPF ---
+    const cpfInput = document.getElementById('idcpf');
+    const mensagemErroCpf = document.getElementById('mensagem-erro-cpf');
+    if (!validarCPF(cpfInput.value)) {
+        cpfInput.classList.add('input-com-erro');
+        mensagemErroCpf.classList.add('erro');
+        formularioValido = false;
+    } else {
+        cpfInput.classList.remove('input-com-erro');
+        mensagemErroCpf.classList.remove('erro');
+    }
+
+    // --- VALIDAÇÃO: EMAIL ---
+    const emailInput = document.getElementById('idemail');
+    const mensagemErroEmail = document.getElementById('mensagem-erro-email');
+    if (!validarEmail(emailInput.value)) {
+        emailInput.classList.add('input-com-erro');
+        mensagemErroEmail.classList.add('erro');
+        formularioValido = false;
+    } else {
+        emailInput.classList.remove('input-com-erro');
+        mensagemErroEmail.classList.remove('erro');
+    }
+
+    // --- VALIDAÇÃO: DATA DE NASCIMENTO ---
+    const dtNascimentoInput = document.getElementById('iddtNascimento');
+    const mensagemErroData = document.getElementById('mensagem-erro-data');
+    if (!validarDataNascimento(dtNascimentoInput.value)) {
+        dtNascimentoInput.classList.add('input-com-erro');
+        mensagemErroData.classList.add('erro');
+        formularioValido = false;
+    } else {
+        dtNascimentoInput.classList.remove('input-com-erro');
+        mensagemErroData.classList.remove('erro');
+    }
+
+    // --- VALIDAÇÃO: SENHA ---
+    const senhaInput = document.getElementById('idsenha');
+    const mensagemErroSenha = document.getElementById('mensagem-erro-senha');
+    if (!validarSenha(senhaInput.value)) {
+        senhaInput.classList.add('input-com-erro');
+        mensagemErroSenha.classList.add('erro');
+        formularioValido = false;
+    } else {
+        senhaInput.classList.remove('input-com-erro');
+        mensagemErroSenha.classList.remove('erro');
+    }
+
+    // BLOQUEIO FINAL: Se houver qualquer erro, impede o envio do formulário
+    if (!formularioValido) {
         e.preventDefault();
     }
 });
-
-function validarSenha(senha) {
-    return senha.length >= 6;
-}
-
-document.querySelector('form').addEventListener('submit', function (e) {
-    const senhaInput = document.getElementById('idsenha');
-    const senha = senhaInput.value;
-
-    if(!validarSenha(senha)){
-        alert('Senha inválida! Deve ter pelo menos 6 caracteres.');
-        e.preventDefault();
-    }
-})
 </script>
 
 <style>
