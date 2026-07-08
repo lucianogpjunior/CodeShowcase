@@ -57,9 +57,9 @@ $resto = implode(' ', $palavras);
             <p style="color: var(--muted); margin-bottom: 1.5rem;">
                 Pagamento único, acesso vitalício ao código-fonte.
             </p>
-            <a href="/comprar/sucesso" class="btn btn-accent" style="width:100%; justify-content:center;">
+            <a href="/projetos/pagamento?uuid=<?= $project->getUuid() ?>" class="btn btn-accent">
                 Comprar agora
-            </a>
+            </a>        
         </div>
     </section>
 </main>

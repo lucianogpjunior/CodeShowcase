@@ -81,6 +81,22 @@ $router->get(
 );
 
 $router->get(
+    '/projetos/pagamento',
+    [
+        ProjectController::class,
+        'pagamentoView'
+    ]
+);
+
+$router->post(
+    '/comprar/processar',
+    [
+        ProjectController::class,
+        'processarPagamento'
+    ]
+);
+
+$router->get(
     '/comprar/sucesso',
     [
         ProjectController::class,
