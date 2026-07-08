@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Config\Security;
 use App\DAO\ProjectDAO;
 use App\Models\ProjectEntity;
 
@@ -16,12 +17,16 @@ class ProjectController {
     }
 
     public function cadastroView() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
         $dao        = new ProjectDAO();
         $categorias = $dao->getCategorias();
         require __DIR__ . '/../Views/CadastroProjectView.php';
     }
 
     public function editView() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
         if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /projetos');
             exit;
@@ -34,6 +39,8 @@ class ProjectController {
             header('Location: /projetos');
             exit;
         }
+
+        $this->assertProjectOwnership($project);
 
         $categorias = $dao->getCategorias();
         require __DIR__ . '/../Views/EditProjectView.php';
@@ -65,6 +72,8 @@ class ProjectController {
     // ── CRUD ─────────────────────────────────────────────────
 
     public function createProject() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
         $nomeProjeto  = trim($_POST['nome'] ?? '');
         $titulo       = trim($_POST['titulo'] ?? '');
         $descricao    = trim($_POST['descricao'] ?? '');
@@ -83,6 +92,11 @@ class ProjectController {
             if (!$imagePath) die("Erro no upload da imagem.");
         }
 
+        $devId = $_SESSION['user']['dev_id'] ?? null;
+        if (empty($devId)) {
+            die('Seu cadastro de desenvolvedor não foi encontrado.');
+        }
+
         $project = new ProjectEntity(
             null,
             $url,
@@ -93,7 +107,7 @@ class ProjectController {
             (float) $precoProjeto,
             (int) $categoriaId,
             $ativo,
-            1
+            (int) $devId
         );
 
         $dao = new ProjectDAO();
@@ -105,6 +119,8 @@ class ProjectController {
 
     // Atualiza o projeto usando o ID numérico enviado pelo formulário
     public function updateProject() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
         if (empty($_POST['id']) || !is_numeric($_POST['id'])) {
             header('Location: /projetos');
             exit;
@@ -117,6 +133,8 @@ class ProjectController {
             header('Location: /projetos');
             exit;
         }
+
+        $this->assertProjectOwnership($project);
 
         $project->setNomeProjeto(trim($_POST['nome'] ?? ''));
         $project->setTitulo(trim($_POST['titulo'] ?? ''));
@@ -138,16 +156,59 @@ class ProjectController {
     }
 
     public function desativarProject() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
         if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /projetos');
             exit;
         }
 
         $dao = new ProjectDAO();
+        $project = $dao->read((int) $_GET['id']);
+
+        if (!$project) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $this->assertProjectOwnership($project);
         $dao->desativar((int) $_GET['id']);
 
         header('Location: /projetos');
         exit;
+    }
+
+    public function deleteProject() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
+        if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $dao = new ProjectDAO();
+        $project = $dao->read((int) $_GET['id']);
+
+        if (!$project) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $this->assertProjectOwnership($project);
+        $dao->delete((int) $_GET['id']);
+
+        header('Location: /projetos');
+        exit;
+    }
+
+    private function assertProjectOwnership(ProjectEntity $project): void {
+        Security::requireRole(['DESENVOLVEDOR']);
+
+        $devId = $_SESSION['user']['dev_id'] ?? null;
+        if ((int) $devId !== (int) $project->getDevId()) {
+            header('Location: /projetos');
+            exit;
+        }
     }
 
     // ── Helper de upload ─────────────────────────────────────

@@ -10,7 +10,9 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
         <h1>Explore, aprenda e <span>compartilhe</span> projetos</h1>
         <p>Uma plataforma para desenvolvedores descobrirem projetos, tutoriais e recursos de qualidade.</p>
         <div class="hero-actions">
-            <a href="/cadastro" class="btn btn-accent">Criar conta</a>
+            <?php if (!\App\Config\Security::isLoggedIn()): ?>
+                <a href="/cadastro" class="btn btn-accent">Criar conta</a>
+            <?php endif; ?>
             <a href="/projetos" class="btn btn-outline">Ver projetos →</a>
         </div>
     </div>

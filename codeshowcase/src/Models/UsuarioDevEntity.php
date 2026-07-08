@@ -8,6 +8,7 @@ class UsuarioDevEntity {
     private $id;
     private $usuarioId;
     private $dtCadastro;
+    private ?UserEntity $usuario = null;
 
     public function __construct($id, $usuarioId, $dtCadastro) {
         $this->setId($id);
@@ -27,6 +28,10 @@ class UsuarioDevEntity {
         return $this->dtCadastro;
     }
 
+    public function getUsuario(): ?UserEntity {
+        return $this->usuario;
+    }
+
     public function setId($id) {
         $this->id = (int) $id;
     }
@@ -41,6 +46,10 @@ class UsuarioDevEntity {
 
     public function setDtCadastro($dtCadastro) {
         $this->dtCadastro = $dtCadastro;
+    }
+
+    public function setUsuario(?UserEntity $usuario): void {
+        $this->usuario = $usuario;
     }
 }
 ?>
