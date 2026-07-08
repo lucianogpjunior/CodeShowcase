@@ -60,7 +60,8 @@ class UserController {
             $senha,
             $dtNascimento,
             date('Y-m-d H:i:s'),
-            true
+            true,
+            'COMUM'
         );
 
         $userDAO = new UserDAO();
@@ -100,12 +101,16 @@ class UserController {
         $devDAO = new UsuarioDevDAO();
         $usuarioDev = $devDAO->readByUsuarioId($user->getId());
 
+        $role = $usuarioDev !== null ? 'DESENVOLVEDOR' : 'COMUM';
+
         $_SESSION['user'] = [
             'id' => $user->getId(),
             'nome' => $user->getNomeCompleto(),
             'nome_usuario' => $user->getNomeUsuario(),
             'email' => $user->getEmail(),
-            'is_dev' => $usuarioDev !== null
+            'role' => $role,
+            'is_dev' => $usuarioDev !== null,
+            'dev_id' => $usuarioDev ? $usuarioDev->getId() : null
         ];
 
         header('Location: /home');
@@ -154,6 +159,8 @@ class UserController {
         $devDAO->create($usuarioDev);
 
         $_SESSION['user']['is_dev'] = true;
+        $_SESSION['user']['role'] = 'DESENVOLVEDOR';
+        $_SESSION['user']['dev_id'] = $usuarioDev->getId();
 
         header('Location: /home');
         exit;

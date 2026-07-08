@@ -9,7 +9,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
     <title>CodeShowcase</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/png" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+
 </head>
 <body>
-<!-- CORRIGIDO: removido </html> prematuro e adicionado <body> que estava faltando -->
-<!-- O </body> e </html> ficam no footer.php -->
