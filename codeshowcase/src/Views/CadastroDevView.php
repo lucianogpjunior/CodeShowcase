@@ -8,8 +8,19 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
         <h1>Cadastro Desenvolvedor</h1>
         <p>Para publicar projetos no marketplace, é necessário registrar seu perfil de desenvolvedor.</p>
 
-        <form action="/dev/cadastrar" method="POST">
+        <form action="/dev/cadastro" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo \App\Config\Security::generateCsrfToken(); ?>">
+
+            <div class="input-group">
+                <label for="idgithub">GitHub (opcional):</label>
+                <input id="idgithub" name="github_url_perfil" type="url" placeholder="https://github.com/seu-usuario">
+            </div>
+
+            <div class="input-group">
+                <label for="idlinkedin">LinkedIn (opcional):</label>
+                <input id="idlinkedin" name="linkedin_url" type="url" placeholder="https://linkedin.com/in/seu-usuario">
+            </div>
+
             <button type="submit">Quero me tornar desenvolvedor</button>
         </form>
     </div>

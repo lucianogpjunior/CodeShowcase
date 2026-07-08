@@ -106,6 +106,12 @@ class UserDAO {
     return $stmt->execute([$id]);
   }
 
+  public function desativar(int $id): bool {
+    $sql  = "UPDATE projetos SET status = 0 WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$id]);
+  }
+
   public function update(UserEntity $user) {
     $sql = "UPDATE usuario SET nome_usuario = ?, nome_completo = ?, email = ?, senha = ?, dt_nascimento = ?, cpf = ?, status = ? WHERE id = ?";
     $stmt = $this->conn->prepare($sql);

@@ -13,10 +13,12 @@ class UsuarioDevDAO {
     }
 
     public function create(UsuarioDevEntity $usuarioDev): UsuarioDevEntity {
-        $sql = "INSERT INTO usuario_dev (usuario_id) VALUES (?)";
+        $sql = "INSERT INTO usuario_dev (usuario_id, github_url_perfil, linkedin_url) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
-            $usuarioDev->getUsuarioId()
+            $usuarioDev->getUsuarioId(),
+            $usuarioDev->getGithubUrlPerfil(),
+            $usuarioDev->getLinkedinUrl()
         ]);
 
         $usuarioDev->setId($this->conn->lastInsertId());
@@ -32,9 +34,11 @@ class UsuarioDevDAO {
         if (!$dados) return null;
 
         return new UsuarioDevEntity(
-            $dados['id'], 
-            $dados['usuario_id'], 
-            $dados['dt_cadastro']
+            $dados['id'],
+            $dados['usuario_id'],
+            $dados['dt_cadastro'],
+            $dados['github_url_perfil'],
+            $dados['linkedin_url']
         );
     }
 
@@ -47,10 +51,22 @@ class UsuarioDevDAO {
         if (!$dados) return null;
 
         return new UsuarioDevEntity(
-            $dados['id'], 
-            $dados['usuario_id'], 
-            $dados['dt_cadastro']
+            $dados['id'],
+            $dados['usuario_id'],
+            $dados['dt_cadastro'],
+            $dados['github_url_perfil'],
+            $dados['linkedin_url']
         );
+    }
+
+    public function update(UsuarioDevEntity $usuarioDev): bool {
+        $sql = "UPDATE usuario_dev SET github_url_perfil = ?, linkedin_url = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            $usuarioDev->getGithubUrlPerfil(),
+            $usuarioDev->getLinkedinUrl(),
+            $usuarioDev->getId()
+        ]);
     }
 
     public function delete(int $id): bool {

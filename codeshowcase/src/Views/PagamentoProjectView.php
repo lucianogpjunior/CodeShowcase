@@ -86,7 +86,7 @@
 
             <!-- Formulário -->
             <form action="/comprar/processar" method="POST">
-                <input type="hidden" name="uuid" value="<?= htmlspecialchars($project->getUuid()) ?>">
+                <input type="hidden" name="uuid" value="<?= htmlspecialchars($project->getId()) ?>">
                 <input type="hidden" name="metodo" id="metodoInput" value="cartao">
 
                 <!-- Cartão -->
@@ -146,7 +146,7 @@
                 <div class="payment-actions">
                     <a href="/projetos" class="btn-secondary" style="padding: 14px 24px; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--muted); text-decoration: none; text-align: center;">← Voltar</a>
                 <!-- Usando <a> igual ao voltar -->
-                <a href="/comprar/sucesso?uuid=<?= htmlspecialchars($project->getUuid()) ?>" class="btn-payment" id="btnPagamento" style="text-decoration: none; text-align: center; display: inline-block;">
+                <a href="/comprar/sucesso?uuid=<?= htmlspecialchars($project->getId()) ?>" class="btn-payment" id="btnPagamento" style="text-decoration: none; text-align: center; display: inline-block;">
                     <span id="btnTexto">Confirmar pagamento</span>
                 </a>
                 </div>

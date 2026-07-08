@@ -45,6 +45,14 @@ $router->get(
     ]
 );
 
+$router->post(
+    '/dev/cadastro',
+    [
+        UserController::class,
+        'createDev'
+    ]
+);
+
 // Listagem pública
 $router->get(
     '/projetos', 
@@ -69,6 +77,14 @@ $router->get(
      [
         ProjectController::class,
          'editView'
+    ]
+);
+
+$router->get(
+    '/projetos/desativar',
+    [
+        ProjectController::class,
+        'desativarProject'
     ]
 );
 
