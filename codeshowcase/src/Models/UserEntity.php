@@ -15,14 +15,14 @@ class UserEntity {
     private  $dataCadastro;
     private  $status;
 
-    public function __construct($id, $nomeUsuario, $nomeCompleto, $email, $senha, $dataNascimento, $cpf, $dataCadastro, $status = true) {
+    public function __construct($id, $nomeUsuario, $nomeCompleto, $email, $senha, $dataNascimento, $dataCadastro, $status = true) {
         $this->setId($id);
         $this->setNomeUsuario($nomeUsuario);
         $this->setNomeCompleto($nomeCompleto);
         $this->setEmail($email);
         $this->setSenha($senha);
         $this->setDataNascimento($dataNascimento);
-        $this->setCpf($cpf);
+    //    $this->setCpf($cpf);
         $this->setDataCadastro($dataCadastro);
         $this->setStatus($status);
     }
@@ -100,6 +100,11 @@ class UserEntity {
     public function setCpf($cpf) {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
+        if(strlen($cpf) === null) {
+            $this->cpf = null;
+            return;
+        }
+        
         if (strlen($cpf) !== 11) {
             throw new \InvalidArgumentException("CPF deve conter 11 dígitos.");
         }

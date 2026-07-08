@@ -11,6 +11,7 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
 
         <!-- CORRIGIDO: </form> estava faltando -->
         <form action="/cadastro-user" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo \App\Config\Security::generateCsrfToken(); ?>">
 
             <div class="input-group">
                 <label for="idnomeUsuario">Nome de usuário:</label>
@@ -33,17 +34,6 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
             </div>
 
             <div class="input-group">
-                <label for="idcpf">CPF:</label>
-                <input
-                    type="text"
-                    id="idcpf"
-                    name="cpf"
-                    maxlength="14"
-                    placeholder="000.000.000-00"
-                >
-            </div>
-
-            <div class="input-group">
                 <label for="idsenha">Senha:</label>
                 <input id="idsenha" name="senha" type="password" required>
             </div>
@@ -51,7 +41,6 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
             <button type="submit">Cadastrar</button>
 
         </form>
-        <!-- CORRIGIDO: </form> adicionado -->
     </div>
 </main>
 

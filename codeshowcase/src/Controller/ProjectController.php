@@ -12,13 +12,13 @@ class ProjectController {
     public function index() {
         $dao      = new ProjectDAO();
         $projects = $dao->readAtivos();
-        require __DIR__ . '/../views/ProjectView.php';
+        require __DIR__ . '/../Views/ProjectView.php';
     }
 
     public function cadastroView() {
         $dao        = new ProjectDAO();
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/CadastroProjectView.php';
+        require __DIR__ . '/../Views/CadastroProjectView.php';
     }
 
     public function editView() {
@@ -36,7 +36,7 @@ class ProjectController {
         }
 
         $categorias = $dao->getCategorias();
-        require __DIR__ . '/../views/EditProjectView.php';
+        require __DIR__ . '/../Views/EditProjectView.php';
     }
 
     public function comprarView() {
@@ -54,11 +54,11 @@ class ProjectController {
             exit;
         }
 
-        require __DIR__ . '/../views/ComprarProjectView.php';
+        require __DIR__ . '/../Views/ComprarProjectView.php';
     }
 
     public function sucessoView() {
-        require __DIR__ . '/../views/SucessoView.php';
+        require __DIR__ . '/../Views/SucessoView.php';
     }
     
 

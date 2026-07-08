@@ -14,7 +14,7 @@ class UserDAO {
 
   // CREATE — Insere um usuário no banco
   public function create(UserEntity $user) {
-    $sql = "INSERT INTO usuario (nome_usuario, nome_completo, email, senha, dt_nascimento, cpf, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuario (nome_usuario, nome_completo, email, senha, dt_nascimento, status) VALUES (?, ?, ?, ?, ?, ?)";
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([
@@ -23,7 +23,6 @@ class UserDAO {
       $user->getEmail(),
       $user->getSenha(),
       $user->getDataNascimento(),
-      $user->getCpf(),
       $user->getStatus() ? 1 : 0
     ]);
     $user->setId($this->conn->lastInsertId());
@@ -37,13 +36,11 @@ class UserDAO {
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([$id]);
-    // CORRIGIDO: \PDO::FETCH_ASSOC com namespace absoluto
     $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
 
     if (!$dados) return null;
 
-    // CORRIGIDO: estava faltando "UserEntity" na instanciação (era "new ($dados...)")
-    $user = new UserEntity(
+    return new UserEntity(
       $dados['id'],
       $dados['nome_usuario'],
       $dados['nome_completo'],
@@ -54,8 +51,29 @@ class UserDAO {
       $dados['dt_cadastro'],
       $dados['status']
     );
+  }
 
-    return $user;
+  public function findByLogin(string $login): ?UserEntity {
+    $sql = "SELECT * FROM usuario WHERE nome_usuario = ? OR email = ? LIMIT 1";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$login, $login]);
+    $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+    if (!$dados) {
+      return null;
+    }
+
+    return new UserEntity(
+      $dados['id'],
+      $dados['nome_usuario'],
+      $dados['nome_completo'],
+      $dados['email'],
+      $dados['senha'],
+      $dados['dt_nascimento'],
+      $dados['cpf'],
+      $dados['dt_cadastro'],
+      $dados['status']
+    );
   }
 
   public function readAll() {
