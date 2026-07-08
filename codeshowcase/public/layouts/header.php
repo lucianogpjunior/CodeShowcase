@@ -16,8 +16,7 @@
             <a href="/dev/cadastro">Perfil Dev</a>
             <a href="/logout">Sair</a>
         <?php else: ?>
-            <a href="/login">Login</a>
-            <a href="/cadastro" class="btn-primary">Cadastrar</a>
+            <a href="/login" class="btn btn-outline mdi mdi-account">Minha Conta</a>
         <?php endif; ?>
     </div>
 

@@ -181,10 +181,6 @@
         <p>Explore todos os projetos publicados na plataforma.</p>
     </div>
 
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
-        <a href="/projetos/cadastro" class="btn btn-accent">+ Novo projeto</a>
-    </div>
-
     <?php if (empty($projects)): ?>
         <p style="color: var(--muted); text-align: center; margin-top: 3rem;">
             Nenhum projeto cadastrado ainda.
@@ -262,14 +258,7 @@
             </div>
 
             <div class="modal-actions">
-                <a id="modalBtnComprar" href="/projetos/comprar" class="btn btn-accent">Comprar</a>
-                <a id="modalBtnEditar" href="/projetos/editar" class="btn btn-outline">Editar projeto</a>
-                <a id="modalBtnDesativar" href="/projetos/desativar"
-                   class="btn btn-outline"
-                   style="color:#F87171; border-color:rgba(248,113,113,0.3);"
-                   onclick="return confirm('Tem certeza que deseja desativar este projeto?')">
-                    Desativar
-                </a>
+                <a id="modalBtnComprar" href="/projetos/comprar" class="btn btn-accent">Visualizar</a>
             </div>
         </div>
     </div>
@@ -297,8 +286,6 @@ function abrirModal(nome, image, titulo, descricao, categoria, preco, status, id
     statusBadge.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
 
     document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + id;
-    document.getElementById('modalBtnEditar').href    = '/projetos/editar?id=' + id;
-    document.getElementById('modalBtnDesativar').href = '/projetos/desativar?id=' + id;
 
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';

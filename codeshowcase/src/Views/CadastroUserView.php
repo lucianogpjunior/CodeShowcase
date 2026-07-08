@@ -9,23 +9,22 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
     <div class="cadastro-container">
         <h1>Cadastrar</h1>
 
-        <!-- CORRIGIDO: </form> estava faltando -->
         <form action="/cadastro-user" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo \App\Config\Security::generateCsrfToken(); ?>">
 
             <div class="input-group">
                 <label for="idnomeUsuario">Nome de usuário:</label>
-                <input id="idnomeUsuario" name="nome_usuario" type="text" required>
+                <input id="idnomeUsuario" name="nome_usuario" type="text" required placeholder="Ex: usuario123">
             </div>
 
             <div class="input-group">
                 <label for="idnome">Nome:</label>
-                <input id="idnome" name="nome" type="text" required>
+                <input id="idnome" name="nome" type="text" required placeholder="Ex: João da Silva">
             </div>
 
             <div class="input-group">
                 <label for="idemail">Email:</label>
-                <input id="idemail" name="email" type="email" required>
+                <input id="idemail" name="email" type="email" required placeholder="Ex: joao@example.com">
             </div>
 
             <div class="input-group">
@@ -35,7 +34,12 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
 
             <div class="input-group">
                 <label for="idsenha">Senha:</label>
-                <input id="idsenha" name="senha" type="password" required>
+                <div style="position: relative;">
+                    <input id="idsenha" name="senha" type="password" required>
+                    <button type="button" id="togglePassword" aria-label="Mostrar senha" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text); cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;">
+                        <span class="mdi mdi-eye" style="font-size: 1.1rem;"></span>
+                    </button>
+                </div>
             </div>
 
             <button type="submit">Cadastrar</button>
@@ -45,6 +49,21 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
 </main>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('idsenha');
+        const toggleButton = document.getElementById('togglePassword');
+
+        if (passwordInput && toggleButton) {
+            toggleButton.addEventListener('click', function () {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                toggleButton.innerHTML = isPassword
+                    ? '<span class="mdi mdi-eye-off" style="font-size: 1.1rem;"></span>'
+                    : '<span class="mdi mdi-eye" style="font-size: 1.1rem;"></span>';
+            });
+        }
+    });
+
     /*
 function validarCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
@@ -99,8 +118,43 @@ document.querySelector('form').addEventListener('submit', function (e) {
         padding: 2.5rem 2rem;
         box-shadow: 0 8px 32px var(--shadow-md);
     }
+
+    .password-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-input-wrapper input {
+        width: 100%;
+        padding-right: 2.8rem;
+    }
+
+    .password-input-wrapper button {
+        position: absolute;
+        right: 0.35rem;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 0.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .password-input-wrapper button:hover {
+        background: var(--surface-2);
+        color: var(--text);
+    }
+
+    .password-input-wrapper .mdi {
+        font-size: 1.05rem;
+    }
 </style>
 
 <?php include __DIR__ . '/../../public/layouts/footer.php'; ?>
-<!-- CORRIGIDO: footer agora fecha </body> e </html> corretamente -->
-<!-- CORRIGIDO: caminhos atualizados de css/layouts/ para public/ -->

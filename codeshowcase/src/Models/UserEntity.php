@@ -5,29 +5,30 @@ namespace App\Models;
 use InvalidArgumentException;
 
 class UserEntity {
-    private  $id;
-    private  $nomeUsuario;
-    private  $nomeCompleto;
-    private  $email;
-    private  $senha;
-    private  $dataNascimento;
-    private  $cpf;
-    private  $dataCadastro;
-    private  $status;
+    private $id;
+    private $nomeUsuario;
+    private $nomeCompleto;
+    private $email;
+    private $senha;
+    private $dataNascimento;
+//    private $cpf;
+    private $dataCadastro;
+    private $status;
+    private $role;
 
-    public function __construct($id, $nomeUsuario, $nomeCompleto, $email, $senha, $dataNascimento, $dataCadastro, $status = true) {
+    public function __construct($id, $nomeUsuario, $nomeCompleto, $email, $senha, $dataNascimento, $dataCadastro = null, $status = true, $role = 'COMUM') {
         $this->setId($id);
         $this->setNomeUsuario($nomeUsuario);
         $this->setNomeCompleto($nomeCompleto);
         $this->setEmail($email);
         $this->setSenha($senha);
         $this->setDataNascimento($dataNascimento);
-    //    $this->setCpf($cpf);
+//        $this->setCpf($cpf);
         $this->setDataCadastro($dataCadastro);
         $this->setStatus($status);
+        $this->setRole($role);
     }
 
-    // Getters
     public function getId() {
         return $this->id;
     }
@@ -64,7 +65,14 @@ class UserEntity {
         return $this->status;
     }
 
-    // Setters
+    public function getRole() {
+        return $this->role;
+    }
+
+    public function isDeveloper(): bool {
+        return $this->role === 'DESENVOLVEDOR';
+    }
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -80,8 +88,9 @@ class UserEntity {
     }
 
     public function setEmail($e) {
-        if (!filter_var($e, FILTER_VALIDATE_EMAIL))
+        if (!filter_var($e, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException("Email inválido.");
+        }
         $this->email = $e;
     }
 
@@ -97,24 +106,24 @@ class UserEntity {
         $this->dataNascimento = $dataNascimento;
     }
 
-    public function setCpf($cpf) {
+/*    public function setCpf($cpf) {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
-        if(strlen($cpf) === null) {
+        if (strlen($cpf) === 0) {
             $this->cpf = null;
             return;
         }
-        
+
         if (strlen($cpf) !== 11) {
             throw new \InvalidArgumentException("CPF deve conter 11 dígitos.");
         }
-        
+
         $this->cpf = $cpf;
     }
-
+*/
     public function setSenha($senha) {
         $info = password_get_info($senha);
-    
+
         if ($info['algo'] === null) {
             $this->senha = password_hash($senha, PASSWORD_DEFAULT);
         } else {
@@ -128,6 +137,21 @@ class UserEntity {
 
     public function setStatus($status) {
         $this->status = (bool) $status;
+    }
+
+    public function setRole($role) {
+        if (is_bool($role)) {
+            $this->role = $role ? 'DESENVOLVEDOR' : 'COMUM';
+            return;
+        }
+
+        $role = strtoupper(trim((string) $role));
+        if (!in_array($role, ['COMUM', 'DESENVOLVEDOR'], true)) {
+            $this->role = 'COMUM';
+            return;
+        }
+
+        $this->role = $role;
     }
 }
 
