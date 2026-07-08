@@ -6,60 +6,97 @@ use InvalidArgumentException;
 
 class ProjectEntity {
     private $id;
-    private $uuid;
     private $url;
-    private $nomeProjeto;
-    private $precoProjeto;
+    private $image;
+    private $nome;
+    private $titulo;
+    private $descricao;
+    private $preco;
     private $categoriaId;
-    private $ativo;
-    // CORRIGIDO: declarada explicitamente para compatibilidade com PHP 8.2+
+    private $devId;
+    private $status;
     public string $nomeCategoria = '';
 
-    public function __construct($id, $uuid, $url, $nomeProjeto, $precoProjeto, $categoriaId, $ativo) {
+    public function __construct($id, $url, $image, $nome, $titulo, $descricao, $preco, $categoriaId, $status, $devId) {
         $this->setId($id);
-        $this->setUuid($uuid);
         $this->setUrl($url);
-        $this->setNomeProjeto($nomeProjeto);
-        $this->setPrecoProjeto($precoProjeto);
+        $this->setImage($image);
+        $this->setNome($nome);
+        $this->setTitulo($titulo);
+        $this->setDescricao($descricao);
+        $this->setPreco($preco);
         $this->setCategoriaId($categoriaId);
-        $this->setAtivo($ativo);
+        $this->setStatus($status);
+        $this->setDevId($devId);
     }
 
     // Getters
     public function getId() { return $this->id; }
-    public function getUuid() { return $this->uuid; }
     public function getUrl() { return $this->url; }
-    public function getNomeProjeto() { return $this->nomeProjeto; }
-    public function getPrecoProjeto() { return $this->precoProjeto; }
+    public function getImage() { return $this->image; }
+    public function getNome() { return $this->nome; }
+    public function getTitulo() { return $this->titulo; }
+    public function getDescricao() { return $this->descricao; }
+    public function getPreco() { return $this->preco; }
     public function getCategoriaId() { return $this->categoriaId; }
-    public function getAtivo() { return $this->ativo; }
+    public function getDevId() { return $this->devId; }
+    public function getStatus() { return $this->status; }
+
+    // Backwards compatibility
+    public function getNomeProjeto() { return $this->getNome(); }
+    public function getPrecoProjeto() { return $this->getPreco(); }
+    public function getAtivo() { return $this->getStatus(); }
 
     // Setters
     public function setId($id) {
         $this->id = $id;
     }
 
-    public function setUuid($uuid) {
-        $this->uuid = $uuid;
+    public function setUrl($url) {
+        $this->url = trim($url);
     }
 
-    public function setUrl($url) {
-        $this->url = $url;
+    public function setImage($image) {
+        $this->image = trim($image);
+    }
+
+    public function setNome($nome) {
+        $nome = trim($nome);
+        if (empty($nome)) {
+            throw new InvalidArgumentException("Nome do projeto não pode ser vazio.");
+        }
+        $this->nome = $nome;
     }
 
     public function setNomeProjeto($nomeProjeto) {
-        $nomeProjeto = trim($nomeProjeto);
-        if (empty($nomeProjeto)) {
-            throw new InvalidArgumentException("Nome do projeto não pode ser vazio.");
-        }
-        $this->nomeProjeto = $nomeProjeto;
+        $this->setNome($nomeProjeto);
     }
 
     public function setPrecoProjeto($precoProjeto) {
-        if ($precoProjeto < 0) {
+        $this->setPreco($precoProjeto);
+    }
+
+    public function setTitulo($titulo) {
+        $titulo = trim($titulo);
+        if (empty($titulo)) {
+            throw new InvalidArgumentException("Título do projeto não pode ser vazio.");
+        }
+        $this->titulo = $titulo;
+    }
+
+    public function setDescricao($descricao) {
+        $descricao = trim($descricao);
+        if (empty($descricao)) {
+            throw new InvalidArgumentException("Descrição do projeto não pode ser vazia.");
+        }
+        $this->descricao = $descricao;
+    }
+
+    public function setPreco($preco) {
+        if ($preco < 0) {
             throw new InvalidArgumentException("Preço do projeto não pode ser menor que R\$0.");
         }
-        $this->precoProjeto = $precoProjeto;
+        $this->preco = $preco;
     }
 
     public function setCategoriaId($categoriaId) {
@@ -69,8 +106,16 @@ class ProjectEntity {
         $this->categoriaId = $categoriaId;
     }
 
+    public function setDevId($devId) {
+        $this->devId = (int) $devId;
+    }
+
+    public function setStatus($status) {
+        $this->status = (bool) $status;
+    }
+
     public function setAtivo($ativo) {
-        $this->ativo = (bool) $ativo;
+        $this->setStatus($ativo);
     }
 }
 ?>

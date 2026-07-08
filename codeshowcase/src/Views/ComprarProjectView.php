@@ -20,7 +20,7 @@ $resto = implode(' ', $palavras);
                 </div>
             </div>
             <div>
-                <img src="<?= htmlspecialchars($project->getUrl()) ?>"
+                <img src="<?= htmlspecialchars($project->getImage()) ?>"
                      alt="<?= htmlspecialchars($project->getNomeProjeto()) ?>"
                      style="width:100%; max-height:360px; object-fit:contain; border-radius: var(--radius-lg);">
             </div>

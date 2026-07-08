@@ -28,6 +28,23 @@ $router->get(
         'cadastroView'
     ]
 );
+
+$router->get(
+    '/login',
+    [
+        UserController::class,
+        'loginView'
+    ]
+);
+
+$router->get(
+    '/dev/cadastro',
+    [
+        UserController::class,
+        'devCadastroView'
+    ]
+);
+
 // Listagem pública
 $router->get(
     '/projetos', 
@@ -45,13 +62,6 @@ $router->get(
          'cadastroView'
     ]
 );
-$router->post(
-    '/projetos/cadastrar',
-     [
-        ProjectController::class,
-         'createProject'
-    ]
-);
  
 // Edição
 $router->get(
@@ -59,30 +69,6 @@ $router->get(
      [
         ProjectController::class,
          'editView'
-    ]
-);
-$router->post(
-    '/projetos/atualizar',
-     [
-        ProjectController::class,
-         'updateProject'
-    ]
-);
- 
-// Deleção
-$router->get(
-    '/projetos/deletar',
-     [
-        ProjectController::class,
-         'deleteProject'
-    ]
-);
-
-$router->get(
-    '/projetos/desativar',
-     [
-        ProjectController::class,
-         'desativarProject'
     ]
 );
 
