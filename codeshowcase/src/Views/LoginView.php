@@ -22,8 +22,9 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
             <button type="submit">Entrar</button>
         </form>
 
-        <div>
+        <div style="margin-top: 1rem; text-align: center;">
             <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+        </div>
     </div>
 </main>
 
