@@ -81,6 +81,14 @@ $router->get(
 );
 
 $router->get(
+    '/projetos/desativar',
+    [
+        ProjectController::class,
+        'desativarProject'
+    ]
+);
+
+$router->get(
     '/projetos/comprar',
     [
         ProjectController::class,

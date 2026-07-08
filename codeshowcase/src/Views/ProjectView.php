@@ -244,7 +244,7 @@
                     <span id="modalCategoriaInfo"></span>
                 </div>
                 <div class="modal-info-item" style="grid-column: span 2;">
-                    <label>UUID</label>
+                    <label>ID</label>
                     <span class="uuid-text" id="modalUuid"></span>
                 </div>
             </div>
@@ -264,7 +264,7 @@
 </div>
 
 <script>
-function abrirModal(nome, url, categoria, preco, status, uuid) {
+function abrirModal(nome, url, categoria, preco, status, id) {
     var imgContainer = document.getElementById('modalImageContainer');
     if (url) {
         imgContainer.innerHTML = '<img src="' + url + '" alt="' + nome + '" class="modal-image">';
@@ -276,15 +276,15 @@ function abrirModal(nome, url, categoria, preco, status, uuid) {
     document.getElementById('modalCategoria').textContent     = categoria;
     document.getElementById('modalCategoriaInfo').textContent = categoria;
     document.getElementById('modalPreco').textContent         = 'R$ ' + preco;
-    document.getElementById('modalUuid').textContent          = uuid;
+    document.getElementById('modalId').textContent          = id;
 
     var statusEl = document.getElementById('modalStatus');
     statusEl.textContent = status === 'ativo' ? 'Ativo' : 'Inativo';
     statusEl.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
 
-    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + uuid;
-    document.getElementById('modalBtnEditar').href    = '/projetos/editar?id=' + uuid;
-    document.getElementById('modalBtnDesativar').href = '/projetos/desativar?id=' + uuid;
+    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + id;
+    document.getElementById('modalBtnEditar').href    = '/projetos/editar?id=' + id;
+    document.getElementById('modalBtnDesativar').href = '/projetos/desativar?id=' + id;
 
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
