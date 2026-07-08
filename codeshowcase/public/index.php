@@ -3,6 +3,9 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Config\Router;
+use App\Config\Security;
+
+Security::initSession();
 
 $router = new Router();
 

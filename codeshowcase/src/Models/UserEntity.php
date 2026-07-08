@@ -6,26 +6,34 @@ use InvalidArgumentException;
 
 class UserEntity {
     private  $id;
+    private  $nomeUsuario;
     private  $nomeCompleto;
     private  $email;
+    private  $senha;
     private  $dataNascimento;
     private  $cpf;
-    private  $senha;
     private  $dataCadastro;
+    private  $status;
 
-    public function __construct($id, $nomeCompleto, $email, $dataNascimento, $cpf, $senha, $dataCadastro) {
+    public function __construct($id, $nomeUsuario, $nomeCompleto, $email, $senha, $dataNascimento, $dataCadastro, $status = true) {
         $this->setId($id);
+        $this->setNomeUsuario($nomeUsuario);
         $this->setNomeCompleto($nomeCompleto);
         $this->setEmail($email);
-        $this->setDataNascimento($dataNascimento);
-        $this->setCpf($cpf);
         $this->setSenha($senha);
+        $this->setDataNascimento($dataNascimento);
+    //    $this->setCpf($cpf);
         $this->setDataCadastro($dataCadastro);
+        $this->setStatus($status);
     }
 
     // Getters
     public function getId() {
         return $this->id;
+    }
+
+    public function getNomeUsuario() {
+        return $this->nomeUsuario;
     }
 
     public function getNomeCompleto() {
@@ -36,6 +44,10 @@ class UserEntity {
         return $this->email;
     }
 
+    public function getSenha() {
+        return $this->senha;
+    }
+
     public function getDataNascimento() {
         return $this->dataNascimento;
     }
@@ -44,12 +56,12 @@ class UserEntity {
         return $this->cpf;
     }
 
-    public function getSenha() {
-        return $this->senha;
-    }
-
     public function getDataCadastro() {
         return $this->dataCadastro;
+    }
+
+    public function getStatus() {
+        return $this->status;
     }
 
     // Setters
@@ -73,6 +85,14 @@ class UserEntity {
         $this->email = $e;
     }
 
+    public function setNomeUsuario($nomeUsuario) {
+        $nomeUsuario = trim($nomeUsuario);
+        if (empty($nomeUsuario)) {
+            throw new InvalidArgumentException("Nome de usuário não pode ser vazio.");
+        }
+        $this->nomeUsuario = $nomeUsuario;
+    }
+
     public function setDataNascimento($dataNascimento) {
         $this->dataNascimento = $dataNascimento;
     }
@@ -80,6 +100,11 @@ class UserEntity {
     public function setCpf($cpf) {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
+        if(strlen($cpf) === null) {
+            $this->cpf = null;
+            return;
+        }
+        
         if (strlen($cpf) !== 11) {
             throw new \InvalidArgumentException("CPF deve conter 11 dígitos.");
         }
@@ -99,6 +124,10 @@ class UserEntity {
 
     public function setDataCadastro($dataCadastro) {
         $this->dataCadastro = $dataCadastro;
+    }
+
+    public function setStatus($status) {
+        $this->status = (bool) $status;
     }
 }
 

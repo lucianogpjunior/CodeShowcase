@@ -131,7 +131,7 @@
     margin-bottom: 3px;
 }
 
-.modal-info-item span {
+..modal-info-item span {
     font-size: 15px;
     font-weight: 600;
     color: var(--text);
@@ -140,14 +140,6 @@
 .modal-info-item span.price {
     color: var(--accent-text);
     font-size: 18px;
-}
-
-.modal-info-item span.uuid {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    word-break: break-all;
-    color: var(--muted);
-    font-weight: 400;
 }
 
 .modal-actions {
@@ -204,18 +196,18 @@
                      style="cursor: pointer;"
                      onclick='abrirModal(
                         <?= json_encode($project->getNomeProjeto()) ?>,
-                        <?= json_encode($project->getUrl()) ?>,
+                        <?= json_encode($project->getImage()) ?>,
+                        <?= json_encode($project->getTitulo()) ?>,
+                        <?= json_encode($project->getDescricao()) ?>,
                         <?= json_encode($project->nomeCategoria ?? "—") ?>,
                         <?= json_encode(number_format($project->getPrecoProjeto(), 2, ",", ".")) ?>,
                         <?= json_encode($project->getAtivo() ? "ativo" : "inativo") ?>,
-                        <?= json_encode($project->getUuid()) ?>,
                         <?= json_encode($project->getId()) ?>
-
                      )'>
 
-                    <?php if ($project->getUrl()): ?>
+                    <?php if ($project->getImage()): ?>
                         <img
-                            src="<?= htmlspecialchars($project->getUrl()) ?>"
+                            src="<?= htmlspecialchars($project->getImage()) ?>"
                             alt="<?= htmlspecialchars($project->getNomeProjeto()) ?>"
                             style="width:100%; height:160px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:0.5rem;"
                         >
@@ -223,6 +215,9 @@
 
                     <span class="card-icon"><?= htmlspecialchars($project->nomeCategoria ?? '—') ?></span>
                     <h2><?= htmlspecialchars($project->getNomeProjeto()) ?></h2>
+                    <p style="margin: 0.25rem 0 0.75rem; font-size:0.95rem; color:var(--muted);">
+                        <?= htmlspecialchars($project->getTitulo()) ?>
+                    </p>
                     <p style="color:var(--accent-text); font-weight:600;">
                         R$ <?= number_format($project->getPrecoProjeto(), 2, ',', '.') ?>
                     </p>
@@ -249,6 +244,7 @@
             </div>
 
             <h2 class="modal-title" id="modalNome"></h2>
+            <p class="modal-description" id="modalDescricao"></p>
 
             <div class="modal-info-grid">
                 <div class="modal-info-item">
@@ -259,9 +255,9 @@
                     <label>Categoria</label>
                     <span id="modalCategoriaInfo"></span>
                 </div>
-                <div class="modal-info-item" style="grid-column: span 2;">
-                    <label>UUID</label>
-                    <span class="uuid" id="modalUuid"></span>
+                <div class="modal-info-item">
+                    <label>Status</label>
+                    <span id="modalStatusText"></span>
                 </div>
             </div>
 
@@ -280,10 +276,10 @@
 </div>
 
 <script>
-function abrirModal(nome, url, categoria, preco, status, uuid, id) {
+function abrirModal(nome, image, titulo, descricao, categoria, preco, status, id) {
     const imgContainer = document.getElementById('modalImageContainer');
-    if (url) {
-        imgContainer.innerHTML = '<img src="' + url + '" alt="' + nome + '" class="modal-image">';
+    if (image) {
+        imgContainer.innerHTML = '<img src="' + image + '" alt="' + nome + '" class="modal-image">';
     } else {
         imgContainer.innerHTML = '<div class="modal-image-placeholder">sem imagem</div>';
     }
@@ -291,18 +287,18 @@ function abrirModal(nome, url, categoria, preco, status, uuid, id) {
     document.getElementById('modalNome').textContent          = nome;
     document.getElementById('modalCategoria').textContent     = categoria;
     document.getElementById('modalCategoriaInfo').textContent = categoria;
+    document.getElementById('modalDescricao').textContent      = descricao;
     document.getElementById('modalPreco').textContent         = 'R$ ' + preco;
-    document.getElementById('modalUuid').textContent          = uuid;
-  
-    var statusEl = document.getElementById('modalStatus');
-    statusEl.textContent = status === 'ativo' ? 'Ativo' : 'Inativo';
-    statusEl.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
+    var statusBadge = document.getElementById('modalStatus');
+    var statusText = document.getElementById('modalStatusText');
+    var statusLabel = status === 'ativo' ? 'Ativo' : 'Inativo';
+    statusBadge.textContent = statusLabel;
+    statusText.textContent = statusLabel;
+    statusBadge.className   = status === 'inativo' ? 'modal-status inativo' : 'modal-status';
 
-
-
-    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?uuid=' + id;
-    document.getElementById('modalBtnEditar').href    = '/projetos/editar?uuid=' + uuid;
-    document.getElementById('modalBtnDesativar').href = '/projetos/desativar?uuid=' + uuid;
+    document.getElementById('modalBtnComprar').href   = '/projetos/comprar?id=' + id;
+    document.getElementById('modalBtnEditar').href    = '/projetos/editar?id=' + id;
+    document.getElementById('modalBtnDesativar').href = '/projetos/desativar?id=' + id;
 
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';

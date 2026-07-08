@@ -14,15 +14,16 @@ class UserDAO {
 
   // CREATE — Insere um usuário no banco
   public function create(UserEntity $user) {
-    $sql = "INSERT INTO usuario (nome_completo, email, dt_nascimento, cpf, senha) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuario (nome_usuario, nome_completo, email, senha, dt_nascimento, status) VALUES (?, ?, ?, ?, ?, ?)";
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([
+      $user->getNomeUsuario(),
       $user->getNomeCompleto(),
       $user->getEmail(),
+      $user->getSenha(),
       $user->getDataNascimento(),
-      $user->getCpf(),
-      $user->getSenha()
+      $user->getStatus() ? 1 : 0
     ]);
     $user->setId($this->conn->lastInsertId());
 
@@ -35,23 +36,44 @@ class UserDAO {
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([$id]);
-    // CORRIGIDO: \PDO::FETCH_ASSOC com namespace absoluto
     $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
 
     if (!$dados) return null;
 
-    // CORRIGIDO: estava faltando "UserEntity" na instanciação (era "new ($dados...)")
-    $user = new UserEntity(
+    return new UserEntity(
       $dados['id'],
+      $dados['nome_usuario'],
       $dados['nome_completo'],
       $dados['email'],
+      $dados['senha'],
       $dados['dt_nascimento'],
       $dados['cpf'],
-      $dados['senha'],
-      $dados['data_cadastro']
+      $dados['dt_cadastro'],
+      $dados['status']
     );
+  }
 
-    return $user;
+  public function findByLogin(string $login): ?UserEntity {
+    $sql = "SELECT * FROM usuario WHERE nome_usuario = ? OR email = ? LIMIT 1";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$login, $login]);
+    $dados = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+    if (!$dados) {
+      return null;
+    }
+
+    return new UserEntity(
+      $dados['id'],
+      $dados['nome_usuario'],
+      $dados['nome_completo'],
+      $dados['email'],
+      $dados['senha'],
+      $dados['dt_nascimento'],
+      $dados['cpf'],
+      $dados['dt_cadastro'],
+      $dados['status']
+    );
   }
 
   public function readAll() {
@@ -63,12 +85,14 @@ class UserDAO {
     while ($dados = $stmt->fetch(\PDO::FETCH_ASSOC)) {
       $user = new UserEntity(
         $dados['id'],
+        $dados['nome_usuario'],
         $dados['nome_completo'],
         $dados['email'],
+        $dados['senha'],
         $dados['dt_nascimento'],
         $dados['cpf'],
-        $dados['senha'],
-        $dados['data_cadastro']
+        $dados['dt_cadastro'],
+        $dados['status']
       );
       // REMOVIDO: setId() duplicado — id já é passado no construtor
       $users[] = $user;
@@ -83,14 +107,16 @@ class UserDAO {
   }
 
   public function update(UserEntity $user) {
-    $sql = "UPDATE usuario SET nome_completo = ?, email = ?, dt_nascimento = ?, cpf = ?, senha = ? WHERE id = ?";
+    $sql = "UPDATE usuario SET nome_usuario = ?, nome_completo = ?, email = ?, senha = ?, dt_nascimento = ?, cpf = ?, status = ? WHERE id = ?";
     $stmt = $this->conn->prepare($sql);
     return $stmt->execute([
+      $user->getNomeUsuario(),
       $user->getNomeCompleto(),
       $user->getEmail(),
+      $user->getSenha(),
       $user->getDataNascimento(),
       $user->getCpf(),
-      $user->getSenha(),
+      $user->getStatus() ? 1 : 0,
       $user->getId()
     ]);
   }

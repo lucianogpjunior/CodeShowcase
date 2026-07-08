@@ -33,13 +33,28 @@
 
                 <div class="input-group">
                     <label>Nome do projeto</label>
-                    <input type="text" name="nome_projeto" placeholder="Ex: Sistema de Gestão" required>
+                    <input type="text" name="nome" placeholder="Ex: Sistema de Gestão" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Título do projeto</label>
+                    <input type="text" name="titulo" placeholder="Ex: Plataforma de vendas" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Descrição</label>
+                    <textarea name="descricao" rows="4" placeholder="Descreva o projeto" required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>URL do projeto (opcional)</label>
+                    <input type="url" name="url" placeholder="https://exemplo.com">
                 </div>
 
                 <div class="form-row">
                     <div class="input-group">
                         <label>Preço (R$)</label>
-                        <input type="number" name="preco_projeto" placeholder="0.00" min="0" step="0.01" required>
+                        <input type="number" name="preco" placeholder="0.00" min="0" step="0.01" required>
                     </div>
 
                     <div class="input-group">
@@ -57,7 +72,7 @@
 
                 <div class="input-group">
                     <label>Imagem do projeto</label>
-                    <input type="file" name="url" accept="image/jpeg,image/png,image/webp,image/gif" required>
+                    <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif" required>
                 </div>
 
                 <div class="input-group" style="flex-direction: row; align-items: center; gap: 10px;">
