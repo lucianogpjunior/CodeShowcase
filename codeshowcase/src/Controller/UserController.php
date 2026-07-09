@@ -67,7 +67,7 @@ class UserController {
         $userDAO = new UserDAO();
         $userDAO->create($user);
 
-        header('Location: /home');
+        header('Location: /login');
         exit;
     }
 

@@ -13,10 +13,12 @@ class UsuarioDevDAO {
     }
 
     public function create(UsuarioDevEntity $usuarioDev): UsuarioDevEntity {
-        $sql = "INSERT INTO usuario_dev (usuario_id) VALUES (?)";
+        $sql = "INSERT INTO usuario_dev (usuario_id, github_url_perfil, linkedin_url) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
-            $usuarioDev->getUsuarioId()
+            $usuarioDev->getUsuarioId(),
+            $usuarioDev->getGithubUrlPerfil(),
+            $usuarioDev->getLinkedinUrl()
         ]);
 
         $usuarioDev->setId($this->conn->lastInsertId());

@@ -6,14 +6,14 @@
 
     <div class="nav-links" id="menu">
         <a href="/home">Home</a>
-        <a href="#">Recursos</a>
         <a href="/projetos">Projetos</a>
-        <a href="#">Tutoriais</a>
     </div>
 
     <div class="auth-links">
-        <?php if (App\Config\Security::isLoggedIn()): ?>
+        <?php if (App\Config\Security::isLoggedIn() && App\Config\Security::getUserRole() === 'COMUM'): ?>
             <a href="/dev/cadastro">Perfil Dev</a>
+            <a href="/logout">Sair</a>
+        <?php elseif (App\Config\Security::getUserRole() === 'DESENVOLVEDOR'): ?>
             <a href="/logout">Sair</a>
         <?php else: ?>
             <a href="/login" class="btn btn-outline mdi mdi-account">Minha Conta</a>
