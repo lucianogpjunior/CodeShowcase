@@ -101,7 +101,13 @@ class UserController {
         $devDAO = new UsuarioDevDAO();
         $usuarioDev = $devDAO->readByUsuarioId($user->getId());
 
-        $role = $usuarioDev !== null ? 'DESENVOLVEDOR' : 'COMUM';
+        $role = $user->getRole();
+        if ($usuarioDev !== null) {
+            $role = 'DESENVOLVEDOR';
+            if ($user->getRole() !== $role) {
+                $userDAO->updateRole($user->getId(), $role);
+            }
+        }
 
         $_SESSION['user'] = [
             'id' => $user->getId(),
@@ -148,15 +154,40 @@ class UserController {
             die('Token CSRF inválido.');
         }
 
-        $userId = $_SESSION['user']['id'];
+        $userId = (int) ($_SESSION['user']['id'] ?? 0);
+        $githubUrl = trim($_POST['github_url_perfil'] ?? '');
+        $linkedinUrl = trim($_POST['linkedin_url'] ?? '');
+
+        if ($githubUrl === '' && isset($_POST['github_url_perfil'])) {
+            $githubUrl = trim((string) $_POST['github_url_perfil']);
+        }
+
+        if ($linkedinUrl === '' && isset($_POST['linkedin_url'])) {
+            $linkedinUrl = trim((string) $_POST['linkedin_url']);
+        }
+
+        if ($userId <= 0) {
+            die('Sessão inválida.');
+        }
+
+        if (empty($githubUrl) || empty($linkedinUrl)) {
+            die('Preencha os dados do perfil do desenvolvedor.');
+        }
+
         $devDAO = new UsuarioDevDAO();
+        $userDAO = new UserDAO();
 
         if ($devDAO->readByUsuarioId($userId)) {
             die('Você já é um desenvolvedor.');
         }
 
         $usuarioDev = new UsuarioDevEntity(null, $userId, date('Y-m-d H:i:s'));
+        $usuarioDev->setGithubUrlPerfil($githubUrl);
+        $usuarioDev->setLinkedinUrl($linkedinUrl);
+
         $devDAO->create($usuarioDev);
+
+        $userDAO->updateRole($userId, 'DESENVOLVEDOR');
 
         $_SESSION['user']['is_dev'] = true;
         $_SESSION['user']['role'] = 'DESENVOLVEDOR';

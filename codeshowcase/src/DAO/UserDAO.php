@@ -14,7 +14,7 @@ class UserDAO {
 
   // CREATE — Insere um usuário no banco
   public function create(UserEntity $user) {
-    $sql = "INSERT INTO usuario (nome_usuario, nome_completo, email, senha, dt_nascimento, status) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuario (nome_usuario, nome_completo, email, senha, dt_nascimento, status, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([
@@ -23,7 +23,8 @@ class UserDAO {
       $user->getEmail(),
       $user->getSenha(),
       $user->getDataNascimento(),
-      $user->getStatus() ? 1 : 0
+      $user->getStatus() ? 1 : 0,
+      $user->getRole()
     ]);
     $user->setId($this->conn->lastInsertId());
 
@@ -40,17 +41,7 @@ class UserDAO {
 
     if (!$dados) return null;
 
-    return new UserEntity(
-      $dados['id'],
-      $dados['nome_usuario'],
-      $dados['nome_completo'],
-      $dados['email'],
-      $dados['senha'],
-      $dados['dt_nascimento'],
-      $dados['cpf'],
-      $dados['dt_cadastro'],
-      $dados['status']
-    );
+    return $this->hydrate($dados);
   }
 
   public function findByLogin(string $login): ?UserEntity {
@@ -63,17 +54,7 @@ class UserDAO {
       return null;
     }
 
-    return new UserEntity(
-      $dados['id'],
-      $dados['nome_usuario'],
-      $dados['nome_completo'],
-      $dados['email'],
-      $dados['senha'],
-      $dados['dt_nascimento'],
-      $dados['cpf'],
-      $dados['dt_cadastro'],
-      $dados['status']
-    );
+    return $this->hydrate($dados);
   }
 
   public function readAll() {
@@ -81,21 +62,8 @@ class UserDAO {
     $stmt = $this->conn->query($sql);
     $users = [];
 
-    // CORRIGIDO: \PDO::FETCH_ASSOC com namespace absoluto
     while ($dados = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-      $user = new UserEntity(
-        $dados['id'],
-        $dados['nome_usuario'],
-        $dados['nome_completo'],
-        $dados['email'],
-        $dados['senha'],
-        $dados['dt_nascimento'],
-        $dados['cpf'],
-        $dados['dt_cadastro'],
-        $dados['status']
-      );
-      // REMOVIDO: setId() duplicado — id já é passado no construtor
-      $users[] = $user;
+      $users[] = $this->hydrate($dados);
     }
     return $users;
   }
@@ -107,7 +75,7 @@ class UserDAO {
   }
 
   public function update(UserEntity $user) {
-    $sql = "UPDATE usuario SET nome_usuario = ?, nome_completo = ?, email = ?, senha = ?, dt_nascimento = ?, cpf = ?, status = ? WHERE id = ?";
+    $sql = "UPDATE usuario SET nome_usuario = ?, nome_completo = ?, email = ?, senha = ?, dt_nascimento = ?, cpf = ?, status = ?, role = ? WHERE id = ?";
     $stmt = $this->conn->prepare($sql);
     return $stmt->execute([
       $user->getNomeUsuario(),
@@ -117,8 +85,29 @@ class UserDAO {
       $user->getDataNascimento(),
       $user->getCpf(),
       $user->getStatus() ? 1 : 0,
+      $user->getRole(),
       $user->getId()
     ]);
+  }
+
+  public function updateRole(int $userId, string $role): bool {
+    $sql = "UPDATE usuario SET role = ? WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$role, $userId]);
+  }
+
+  private function hydrate(array $dados): UserEntity {
+    return new UserEntity(
+      $dados['id'],
+      $dados['nome_usuario'],
+      $dados['nome_completo'],
+      $dados['email'],
+      $dados['senha'],
+      $dados['dt_nascimento'],
+      $dados['dt_cadastro'] ?? null,
+      $dados['status'] ?? 1,
+      $dados['role'] ?? 'COMUM'
+    );
   }
 }
 ?>

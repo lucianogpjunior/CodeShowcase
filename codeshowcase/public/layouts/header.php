@@ -14,6 +14,7 @@
             <a href="/dev/cadastro">Perfil Dev</a>
             <a href="/logout">Sair</a>
         <?php elseif (App\Config\Security::getUserRole() === 'DESENVOLVEDOR'): ?>
+            <a href="/meus-projetos">Meus Projetos</a>
             <a href="/logout">Sair</a>
         <?php else: ?>
             <a href="/login" class="btn btn-outline mdi mdi-account">Minha Conta</a>

@@ -62,6 +62,14 @@ $router->get(
          'cadastroView'
     ]
 );
+
+$router->get(
+    '/meus-projetos',
+    [
+        ProjectController::class,
+        'meusProjetosView'
+    ]
+);
  
 // Edição
 $router->get(

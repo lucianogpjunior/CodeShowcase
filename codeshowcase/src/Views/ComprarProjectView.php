@@ -16,6 +16,9 @@ $resto = implode(' ', $palavras);
                 <p>Confira os detalhes deste projeto disponível para compra.</p>
                 <div class="hero-actions">
                     <a href="#valores" class="btn btn-accent">Comprar agora</a>
+                    <?php if (!empty($project->getUrl())): ?>
+                        <a href="<?= htmlspecialchars($project->getUrl()) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Preview</a>
+                    <?php endif; ?>
                     <a href="/projetos" class="btn btn-outline">Voltar</a>
                 </div>
             </div>

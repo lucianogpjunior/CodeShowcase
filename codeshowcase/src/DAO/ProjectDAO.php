@@ -69,6 +69,17 @@ class ProjectDAO {
         return $this->hydrateAll($stmt);
     }
 
+    public function readByDevId(int $devId): array {
+        $sql  = "SELECT p.*, c.categoria AS categoria_nome
+                 FROM projetos p
+                 LEFT JOIN categorias c ON p.categoria_id = c.id
+                 WHERE p.dev_id = ?
+                 ORDER BY p.status DESC, p.id DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$devId]);
+        return $this->hydrateAll($stmt);
+    }
+
     // UPDATE — atualiza pelo ID interno
     public function update(ProjectEntity $project): bool {
         $sql  = "UPDATE projetos

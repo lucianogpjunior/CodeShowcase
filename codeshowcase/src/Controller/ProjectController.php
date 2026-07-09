@@ -24,6 +24,20 @@ class ProjectController {
         require __DIR__ . '/../Views/CadastroProjectView.php';
     }
 
+    public function meusProjetosView() {
+        Security::requireRole(['DESENVOLVEDOR']);
+
+        $devId = $_SESSION['user']['dev_id'] ?? null;
+        if (empty($devId)) {
+            header('Location: /home');
+            exit;
+        }
+
+        $dao      = new ProjectDAO();
+        $projects = $dao->readByDevId((int) $devId);
+        require __DIR__ . '/../Views/MeusProjetosView.php';
+    }
+
     public function editView() {
         Security::requireRole(['DESENVOLVEDOR']);
 
