@@ -1,0 +1,54 @@
+<?php \App\Config\Security::initSession(); ?>
+<nav class="navbar">
+    <div style="display: flex; align-items: center;">
+        <img src="/assets/favicon.ico" class="logo" alt="Logo">
+    </div>
+
+    <div class="nav-links" id="menu">
+        <a href="/home">Home</a>
+        <a href="/projetos">Projetos</a>
+    </div>
+
+    <div class="auth-links">
+        <?php if (App\Config\Security::isLoggedIn() && App\Config\Security::getUserRole() === 'COMUM'): ?>
+            <a href="/dev/cadastro">Perfil Dev</a>
+            <a href="/logout">Sair</a>
+        <?php elseif (App\Config\Security::getUserRole() === 'DESENVOLVEDOR'): ?>
+            <a href="/meus-projetos">Meus Projetos</a>
+            <a href="/logout">Sair</a>
+        <?php else: ?>
+            <a href="/login" class="btn btn-outline mdi mdi-account">Minha Conta</a>
+        <?php endif; ?>
+    </div>
+
+    <div class="navbar-buttons">
+        <button id="themeBtn" class="theme-btn" onclick="trocarTema()" aria-label="Alternar tema">
+            <img id="themeIcon" src="/assets/moon.png" alt="Tema">
+        </button>
+        <button class="menu-btn" onclick="abrirMenu()">☰</button>
+    </div>
+</nav>
+
+<script>
+(function () {
+    const body = document.body;
+    const icon = document.getElementById("themeIcon");
+
+    // Padrão é dark — aplica light só se salvo
+    const saved = localStorage.getItem("theme");
+    if (saved === "light") {
+        body.classList.add("light");
+        icon.src = "/assets/sun.png";
+    }
+
+    window.trocarTema = function () {
+        const isLight = body.classList.toggle("light");
+        icon.src = isLight ? "/assets/sun.png" : "/assets/moon.png";
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+    };
+
+    window.abrirMenu = function () {
+        document.getElementById("menu").classList.toggle("active");
+    };
+})();
+</script>
