@@ -39,6 +39,8 @@
                     <!-- value preenchido com dado atual do projeto -->
                     <input type="text" name="nome"
                            value="<?= htmlspecialchars($project->getNomeProjeto()) ?>" required>
+                    <!-- MENSAGEM DE ERRO DO NOME -->
+                    <span id="erro-nome" class="erro-oculto">Nome do projeto inválido! Use apenas letras, números e pontuação básica.</span>
                 </div>
 
                 <div class="input-group">
@@ -65,6 +67,8 @@
                         <input type="number" name="preco"
                                value="<?= $project->getPrecoProjeto() ?>"
                                min="0" step="0.01" required>
+                        <!-- MENSAGEM DE ERRO DO PREÇO -->
+                        <span id="erro-preco" class="erro-oculto">O projeto pode ser gratuito mas o preço não pode ser menor que zero.</span>
                     </div>
 
                     <div class="input-group">
@@ -115,5 +119,51 @@
         </div>
     </div>
 </main>
+<script>
+// Função para validar o formato do nome do projeto
+function validarNome(nome) {
+    const regex = /^[A-Za-zÀ-ÿ0-9\s.,'-]+$/;
+    return regex.test(nome);
+}
+
+// Gerencia o envio do formulário com validações visuais
+const form = document.querySelector('form');
+form.addEventListener('submit', function(event) {
+    let formularioValido = true;
+
+    // --- VALIDAÇÃO: NOME DO PROJETO ---
+    const nomeInput = form.querySelector('input[name="nome"]');
+    const erroNome = document.getElementById('erro-nome');
+    
+    if (!validarNome(nomeInput.value)) {
+        nomeInput.classList.add('input-com-erro');
+        erroNome.classList.add('erro');
+        formularioValido = false;
+    } else {
+        nomeInput.classList.remove('input-com-erro');
+        erroNome.classList.remove('erro');
+    }
+
+    // --- VALIDAÇÃO: PREÇO ---
+    const precoInput = form.querySelector('input[name="preco"]');
+    const erroPreco = document.getElementById('erro-preco');
+    const precoValue = parseFloat(precoInput.value);
+
+    // Corrigido para 'isNaN' e mapeado para o campo correto 'preco'
+    if (isNaN(precoValue) || precoValue < 0) {
+        precoInput.classList.add('input-com-erro');
+        erroPreco.classList.add('erro');
+        formularioValido = false;
+    } else {
+        precoInput.classList.remove('input-com-erro');
+        erroPreco.classList.remove('erro');
+    }
+
+    // BLOQUEIO FINAL: Cancela o envio se algo falhar
+    if (!formularioValido) {
+        event.preventDefault();
+    }
+});
+</script
 
 <?php include __DIR__ . '/../../public/layouts/footer.php'; ?>
