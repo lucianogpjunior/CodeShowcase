@@ -7,7 +7,7 @@ A aplicação usa roteamento manual em `public/index.php`, templates em `src/Vie
 - PHP 8.0 ou superior
 - Extensão PHP `pdo` e `pdo_mysql`
 - MySQL / MariaDB
-- Composer (recomendado para gerar autoload)
+- Composer
 - Permissão de escrita em `public/assets/uploads/` para upload de imagens
 
 ## Configuração do banco de dados
