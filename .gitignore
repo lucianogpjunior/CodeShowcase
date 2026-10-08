@@ -1,1 +1,5 @@
 codeshowcase_db.sql
+# Arquivos de ambiente
+.env
+.env.*
+!.env.example
