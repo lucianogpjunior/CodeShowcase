@@ -1,5 +1,12 @@
+# Banco de dados local
+
 codeshowcase_db.sql
+
 # Arquivos de ambiente
+
 .env
 .env.*
 !.env.example
+
+# IDE
+.idea/
