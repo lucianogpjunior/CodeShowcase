@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: codeshowcase-docker/Dockerfile
+    ports:
+      - "8080:80"
+
+  db:
+    image: mysql:8.4
+    env_file:
+      - .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:
