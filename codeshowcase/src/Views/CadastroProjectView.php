@@ -28,6 +28,14 @@
                 <h1>Cadastrar projeto</h1>
                 <p>Preencha os dados do novo projeto</p>
             </div>
+            <?php if (isset($_SESSION['flash_error'])): ?>
+                <div class="message-error">
+                    <?php
+                        echo htmlspecialchars($_SESSION['flash_error'], ENT_QUOTES, 'UTF-8');
+                        unset($_SESSION['flash_error']);
+                    ?>
+                </div>
+            <?php endif;?>
 
             <form action="/projetos/cadastrar" method="POST" enctype="multipart/form-data">
 

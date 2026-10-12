@@ -7,6 +7,8 @@ services:
       - "8080:80"
     env_file:
       - ../codeshowcase/.env
+    volumes:
+      - ../codeshowcase:/var/www/html
 
   db:
     image: mysql:8.4
