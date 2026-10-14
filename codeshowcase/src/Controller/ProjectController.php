@@ -156,9 +156,12 @@ public function processarPagamento() {
 
         $imagePath = '';
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $_SESSION['flash_error'] = 'Não foi possível processar sua imagem.';
-            header('Location: /projetos/cadastro');
-            exit;
+            $imagePath = $this->handleUpload($_FILES['image']);
+            if (!$imagePath){
+                $_SESSION['flash_error'] = 'Não foi possível processar sua imagem.';
+                header('Location: /projetos/cadastro');
+                exit;
+            }    
         }
 
         $devId = $_SESSION['user']['dev_id'] ?? null;
