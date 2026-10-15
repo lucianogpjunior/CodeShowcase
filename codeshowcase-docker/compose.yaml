@@ -16,5 +16,6 @@ services:
       - .env
     volumes:
       - mysql_data:/var/lib/mysql
+      - ../codeshowcase/database/schema_local.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
 volumes:
   mysql_data:
