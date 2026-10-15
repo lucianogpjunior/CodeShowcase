@@ -149,18 +149,32 @@ public function processarPagamento() {
         $ativo        = isset($_POST['ativo']) ? 1 : 0;
 
         if (empty($nomeProjeto) || empty($titulo) || empty($descricao) || $precoProjeto === '' || empty($categoriaId)) {
-            die("Todos os campos obrigatórios devem ser preenchidos.");
+            $_SESSION['flash_error'] = 'Não é possível espaços vazios.';
+            header('Location: /projetos/cadastro');
+            exit;
         }
 
         $imagePath = '';
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $imagePath = $this->handleUpload($_FILES['image']);
-            if (!$imagePath) die("Erro no upload da imagem.");
+            if (!$imagePath){
+                $_SESSION['flash_error'] = 'Não foi possível processar sua imagem.';
+                header('Location: /projetos/cadastro');
+                exit;
+            }    
         }
 
         $devId = $_SESSION['user']['dev_id'] ?? null;
         if (empty($devId)) {
-            die('Seu cadastro de desenvolvedor não foi encontrado.');
+            $_SESSION['flash_error'] = 'Seu devID não é válido.';
+            header('Location: /projetos/cadastro');
+            exit;
+        }
+
+        if (!is_numeric($precoProjeto) || $precoProjeto < 0 || $precoProjeto > 99999999.99) {
+            $_SESSION['flash_error'] = 'Seu preço é inválido ou não permitido.';
+            header('Location: /projetos/cadastro');
+            exit;
         }
 
         $project = new ProjectEntity(

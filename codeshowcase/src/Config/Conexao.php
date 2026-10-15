@@ -9,34 +9,63 @@ class Conexao {
     private static $instancia = null;
     private static $env = null;
 
+
     public static function getConexao() {
         if (self::$instancia === null) {
-            $host    = self::getEnvValue('DB_HOST');
-            $name    = self::getEnvValue('DB_NAME');
-            $user    = self::getEnvValue('DB_USER');
-            $pass    = self::getEnvValue('DB_PASSWORD');
+            $modo = self::getEnvValue('DB_MODE', 'online');
+
+            if (!in_array($modo, ['local', 'online'], true)) {
+                throw new \RuntimeException(
+                    'DB_MODE deve ser local ou online.'
+                );
+            }
+
+            $prefixo = $modo === 'local' ? 'DB_LOCAL_' : 'DB_ONLINE_';
+
+            $host = self::getEnvValue($prefixo . 'HOST');
+            $name = self::getEnvValue($prefixo . 'NAME');
+            $user = self::getEnvValue($prefixo . 'USER');
+            $pass = self::getEnvValue($prefixo . 'PASSWORD');
+
+            if (!$host || !$name || !$user || $pass === null) {
+                throw new \RuntimeException(
+                    "Configuração incompleta para o banco {$modo}."
+                );
+            }
 
             try {
                 self::$instancia = new PDO(
-                    "mysql:host={$host};dbname={$name}",
+                    "mysql:host={$host};dbname={$name};charset=utf8mb4",
                     $user,
-                    $pass
+                    $pass,
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    ]
                 );
-                self::$instancia->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                die("Erro: " . $e->getMessage());
+                error_log('Falha ao conectar ao banco de dados.');
+                throw new \RuntimeException(
+                    'Não foi possível conectar ao banco de dados.'
+                );
             }
         }
 
         return self::$instancia;
     }
 
+
     private static function getEnvValue(string $key, $default = null) {
         if (self::$env === null) {
             self::loadEnv();
         }
 
-        $value = self::$env[$key] ?? null;
+        // Prioriza variáveis fornecidas pelo ambiente, como o Docker.
+        $value = getenv($key);
+
+        if ($value === false || $value === '') {
+            $value = self::$env[$key] ?? null;
+        }
+
         if ($value === null || $value === '') {
             return $default;
         }

@@ -49,7 +49,9 @@ class UserController {
             empty($dtNascimento) ||
             empty($senha)
         ) {
-            die("Todos os campos são obrigatórios.");
+            $_SESSION['flash_error'] = 'Não é possível dados vazios.';
+            header('Location: /projetos/cadastro');
+            exit;
         }
 
         $user = new UserEntity(
@@ -89,11 +91,15 @@ class UserController {
         $user = $userDAO->findByLogin($login);
 
         if (!$user || !password_verify($senha, $user->getSenha())) {
-            die('Usuário ou senha inválidos.');
+            $_SESSION['flash_error'] = 'Senha incorreta.';
+            header('Location: /projetos/cadastro');
+            exit;
         }
 
         if (!$user->getStatus()) {
-            die('Esta conta está desativada.');
+            $_SESSION['flash_error'] = 'Conta desativada.';
+            header('Location: /projetos/cadastro');
+            exit;
         }
 
         session_regenerate_id(true);

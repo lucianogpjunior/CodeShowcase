@@ -6,6 +6,14 @@ require_once __DIR__ . '/../../public/BaseLayout.php';
 <main>
     <div class="cadastro-container">
         <h1>Login</h1>
+        <?php if (isset($_SESSION['flash_error'])): ?>
+            <div class="message-error">
+                <?php
+                    echo htmlspecialchars($_SESSION['flash_error'], ENT_QUOTES, 'UTF-8');
+                    unset($_SESSION['flash_error']);
+                ?>
+            </div>
+        <?php endif;?>
         <form action="/login" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo \App\Config\Security::generateCsrfToken(); ?>">
 
