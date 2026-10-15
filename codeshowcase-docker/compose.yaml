@@ -5,17 +5,43 @@ services:
       dockerfile: codeshowcase-docker/Dockerfile
     ports:
       - "8080:80"
-    env_file:
-      - ../codeshowcase/.env
+    environment:
+      DB_MODE: local
+      DB_LOCAL_HOST: db
+      DB_LOCAL_NAME: ${MYSQL_DATABASE:?Defina MYSQL_DATABASE em codeshowcase-docker/.env}
+      DB_LOCAL_USER: ${MYSQL_USER:?Defina MYSQL_USER em codeshowcase-docker/.env}
+      DB_LOCAL_PASSWORD: ${MYSQL_PASSWORD:?Defina MYSQL_PASSWORD em codeshowcase-docker/.env}
     volumes:
       - ../codeshowcase:/var/www/html
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
 
   db:
     image: mysql:8.4
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
     volumes:
       - mysql_data:/var/lib/mysql
-      - ../codeshowcase/database/schema_local.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+  db-init:
+    image: mysql:8.4
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../codeshowcase/database/schema_local.sql:/schema_local.sql:ro
+    entrypoint: ["sh", "-c"]
+    command:
+      - mysql --host=db --user="$${MYSQL_USER}" --password="$${MYSQL_PASSWORD}" "$${MYSQL_DATABASE}" < /schema_local.sql
+
 volumes:
   mysql_data:

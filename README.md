@@ -2,6 +2,26 @@
 
 A aplicação usa roteamento manual em `public/index.php`, templates em `src/Views/` e acesso a banco MySQL via PDO.
 
+## Executando com Docker
+
+Na primeira execução, crie `codeshowcase-docker/.env` a partir de
+`codeshowcase-docker/.env.example` e defina senhas próprias para o banco:
+
+```bash
+cp codeshowcase-docker/.env.example codeshowcase-docker/.env
+```
+
+Suba a aplicação e o MySQL a partir da raiz do repositório:
+
+```bash
+docker compose -f codeshowcase-docker/compose.yaml up -d --build
+```
+
+A aplicação estará disponível em `http://localhost:8080`. O Compose configura a
+conexão da aplicação para o serviço `db`, aguarda o MySQL ficar saudável e
+aplica `codeshowcase/database/schema_local.sql` antes de iniciar a aplicação.
+Assim, o esquema também é aplicado quando já existe um volume de banco criado.
+
 ## Pré-requisitos
 
 - PHP 8.0 ou superior
