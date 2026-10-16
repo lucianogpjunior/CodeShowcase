@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Config\Security;
+use App\DAO\CompraDAO;
 use App\DAO\ProjectDAO;
+use App\Models\CompraEntity;
 use App\Models\ProjectEntity;
 
 class ProjectController {
@@ -69,7 +71,6 @@ class ProjectController {
         $dao = new ProjectDAO();
         $project = $dao->read((int) $_GET['id']);
 
-
         if (!$project) {
             header('Location: /projetos');
             exit;
@@ -78,60 +79,131 @@ class ProjectController {
         require __DIR__ . '/../Views/ComprarProjectView.php';
     }
     
-public function pagamentoView() {
-    if (!isset($_GET['id'])) {
-        header('Location: /projetos');
-        exit;
-    }
+    public function pagamentoView() {
+        Security::requireLogin();
 
-    $dao = new ProjectDAO();
-    $project = $dao->read((int) $_GET['id']);
-
-    if (!$project) {
-        header('Location: /projetos');
-        exit;
-    }
-
-    // 🔥 Busca TODAS as categorias (você já tem esse método)
-    $categorias = $dao->getCategorias();
-
-    // Passa as duas variáveis para a view
-    require __DIR__ . '/../Views/PagamentoProjectView.php';
-}
-public function processarPagamento() {
-    // Iniciar sessão
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-
-    // Verifica se é POST
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: /projetos');
-        exit;
-    }
-
-    // Pega os dados
-    $id = $_POST['id'] ?? '';
-    $metodo = $_POST['metodo'] ?? 'cartao';
-
-    // Validação do cartão (só se for cartão)
-    if ($metodo === 'cartao') {
-        $cartao  = trim($_POST['cartao'] ?? '');
-        $validade = trim($_POST['validade'] ?? '');
-        $cvv     = trim($_POST['cvv'] ?? '');
-
-        if (empty($cartao) || empty($validade) || empty($cvv)) {
-            $_SESSION['erro_pagamento'] = 'Preencha todos os dados do cartão.';
-            header('Location: /projetos/pagamento?id=' . urlencode($id));
+        if (!isset($_GET['id'])) {
+            header('Location: /projetos');
             exit;
         }
+
+        $dao = new ProjectDAO();
+        $project = $dao->read((int) $_GET['id']);
+
+        if (!$project) {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $userId = (int) ($_SESSION['user']['id'] ?? 0);
+        if ($userId && (int) $project->getDevId() === $userId) {
+            $_SESSION['flash_error'] = 'Você não pode comprar seu próprio projeto.';
+            header('Location: /projetos');
+            exit;
+        }
+
+        $categorias = $dao->getCategorias();
+        require __DIR__ . '/../Views/PagamentoProjectView.php';
     }
 
-    header('Location: /comprar/sucesso');
-    exit;
-}
+    public function processarPagamento() {
+        Security::requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /projetos');
+            exit;
+        }
+
+        $projectId = (int) ($_POST['id'] ?? 0);
+        if ($projectId <= 0) {
+            $_SESSION['erro_pagamento'] = 'Projeto inválido.';
+            header('Location: /projetos');
+            exit;
+        }
+
+        $projectDAO = new ProjectDAO();
+        $project = $projectDAO->read($projectId);
+        if (!$project) {
+            $_SESSION['erro_pagamento'] = 'Projeto não encontrado.';
+            header('Location: /projetos');
+            exit;
+        }
+
+        $compradorId = (int) ($_SESSION['user']['id'] ?? 0);
+        if ($compradorId === 0) {
+            $_SESSION['erro_pagamento'] = 'Faça login para continuar.';
+            header('Location: /login');
+            exit;
+        }
+
+        if ((int) $project->getDevId() === $compradorId) {
+            $_SESSION['erro_pagamento'] = 'Você não pode comprar seu próprio projeto.';
+            header('Location: /projetos');
+            exit;
+        }
+
+        $compraDAO = new CompraDAO();
+        $compraExistente = $compraDAO->findByProjectAndBuyer($projectId, $compradorId);
+        if ($compraExistente && $compraExistente->getStatus() === 'PENDENTE') {
+            $checkout = $this->createStripeCheckoutSession($project, $compraExistente);
+            if ($checkout['url']) {
+                header('Location: ' . $checkout['url']);
+                exit;
+            }
+        }
+
+        $compra = new CompraEntity(
+            null,
+            $projectId,
+            $compradorId,
+            (int) $project->getDevId(),
+            (float) $project->getPrecoProjeto(),
+            'PENDENTE',
+            'STRIPE',
+            null,
+            null,
+            date('Y-m-d H:i:s'),
+            null
+        );
+
+        $compra = $compraDAO->create($compra);
+
+        $checkout = $this->createStripeCheckoutSession($project, $compra);
+        if (!$checkout['url']) {
+            $_SESSION['erro_pagamento'] = 'Não foi possível iniciar o pagamento. Verifique a configuração do Stripe.';
+            header('Location: /projetos/pagamento?id=' . urlencode((string) $projectId));
+            exit;
+        }
+
+        $compraDAO->updateSession((int) $compra->getId(), (string) $checkout['session_id']);
+        header('Location: ' . $checkout['url']);
+        exit;
+    }
 
     public function sucessoView() {
+        Security::initSession();
+
+        $sessionId = $_GET['session_id'] ?? null;
+        $compraId = (int) ($_GET['compra_id'] ?? 0);
+
+        if ($sessionId) {
+            $compraDAO = new CompraDAO();
+            $compra = $compraId > 0 ? $compraDAO->findById($compraId) : $compraDAO->findByStripeSessionId((string) $sessionId);
+
+            if ($compra) {
+                $statusPago = $this->verifyStripeSessionPayment((string) $sessionId, (int) $compra->getId());
+                if ($statusPago) {
+                    $compraDAO->updateStatus((int) $compra->getId(), 'PAGO');
+                    $_SESSION['compra_sucesso'] = 'Pagamento confirmado com sucesso!';
+                }
+            }
+        }
+
+        $compraAtual = null;
+        if (!empty($_SESSION['compra_sucesso'])) {
+            $compraAtual = $compraId ? (new CompraDAO())->findById($compraId) : null;
+        }
+
         require __DIR__ . '/../Views/SucessoView.php';
     }
 
@@ -289,6 +361,94 @@ public function processarPagamento() {
             header('Location: /projetos');
             exit;
         }
+    }
+
+    private function createStripeCheckoutSession(ProjectEntity $project, CompraEntity $compra): array {
+        $secretKey = getenv('STRIPE_SECRET_KEY') ?: ($_ENV['STRIPE_SECRET_KEY'] ?? '');
+        if (empty($secretKey)) {
+            return ['url' => '', 'session_id' => ''];
+        }
+
+        $baseUrl = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $payload = [
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'brl',
+                    'product_data' => [
+                        'name' => $project->getNomeProjeto(),
+                    ],
+                    'unit_amount' => (int) round((float) $project->getPrecoProjeto() * 100),
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $baseUrl . '/comprar/sucesso?session_id={CHECKOUT_SESSION_ID}&compra_id=' . urlencode((string) $compra->getId()),
+            'cancel_url' => $baseUrl . '/projetos/pagamento?id=' . urlencode((string) $project->getId()),
+            'customer_email' => $_SESSION['user']['email'] ?? '',
+            'metadata' => [
+                'compra_id' => (string) $compra->getId(),
+                'projeto_id' => (string) $project->getId(),
+            ],
+        ];
+
+        $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $secretKey,
+            'Content-Type: application/x-www-form-urlencoded',
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($response === false || $httpCode >= 400) {
+            $message = curl_error($ch);
+            error_log('Stripe checkout error: ' . ($message ?: 'HTTP ' . $httpCode));
+            curl_close($ch);
+            return ['url' => '', 'session_id' => ''];
+        }
+
+        curl_close($ch);
+        $body = json_decode($response, true);
+
+        return [
+            'url' => $body['url'] ?? '',
+            'session_id' => $body['id'] ?? '',
+        ];
+    }
+
+    private function verifyStripeSessionPayment(string $sessionId, int $compraId): bool {
+        $secretKey = getenv('STRIPE_SECRET_KEY') ?: ($_ENV['STRIPE_SECRET_KEY'] ?? '');
+        if (empty($secretKey) || empty($sessionId)) {
+            return false;
+        }
+
+        $ch = curl_init('https://api.stripe.com/v1/checkout/sessions/' . rawurlencode($sessionId));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $secretKey,
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($response === false || $httpCode >= 400) {
+            return false;
+        }
+
+        $body = json_decode($response, true);
+        if (($body['payment_status'] ?? '') !== 'paid' && ($body['status'] ?? '') !== 'complete') {
+            return false;
+        }
+
+        $compraDAO = new CompraDAO();
+        $compraDAO->updateStatus($compraId, 'PAGO');
+        $compraDAO->updatePaymentIntent($compraId, $body['payment_intent'] ?? '');
+
+        return true;
     }
 
     // ── Helper de upload ─────────────────────────────────────
