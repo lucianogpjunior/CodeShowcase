@@ -4,7 +4,7 @@ setlocal
 cd /d "%~dp0"
 
 echo Iniciando o CodeShowcase...
-docker compose -f "../codeshowcase-docker\compose.yaml" up -d
+docker compose -f "codeshowcase-docker\compose.yaml" up -d
 
 if errorlevel 1 (
     echo.

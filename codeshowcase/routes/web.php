@@ -4,7 +4,6 @@
 use App\Controller\HomeController;
 use App\Controller\UserController;
 use App\Controller\ProjectController;
-use App\Controller\ChatController;
 
 $router->get(
     '/',
@@ -110,29 +109,5 @@ $router->get(
     [
         ProjectController::class,
         'sucessoView'
-    ]
-);
-
-$router->get(
-    '/chat',
-    [
-        ChatController::class,
-        'index'
-    ]
-);
-
-$router->post(
-    '/chat/enviar',
-    [
-        ChatController::class,
-        'enviarMensagem'
-    ]
-);
-
-$router->get(
-    '/chat/mensagens',
-    [
-        ChatController::class,
-        'mensagens'
     ]
 );

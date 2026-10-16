@@ -77,52 +77,6 @@ CREATE TABLE IF NOT EXISTS `projetos` (
     CONSTRAINT `ck_projetos_preco` CHECK (`preco` >= 0)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `compras` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `projeto_id` INT UNSIGNED NOT NULL,
-    `comprador_id` INT UNSIGNED NOT NULL,
-    `vendedor_id` INT UNSIGNED NOT NULL,
-    `valor` DECIMAL(10,2) NOT NULL,
-    `status` ENUM('PENDENTE', 'PAGO', 'CANCELADO', 'ENTREGUE') NOT NULL DEFAULT 'PENDENTE',
-    `metodo` ENUM('STRIPE', 'PIX', 'BOLETO', 'CARTAO') NOT NULL DEFAULT 'STRIPE',
-    `stripe_session_id` VARCHAR(255) NULL,
-    `stripe_payment_intent_id` VARCHAR(255) NULL,
-    `data_criacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `data_atualizacao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    KEY `idx_compras_projeto_id` (`projeto_id`),
-    KEY `idx_compras_comprador_id` (`comprador_id`),
-    KEY `idx_compras_vendedor_id` (`vendedor_id`),
-    CONSTRAINT `fk_compras_projeto`
-        FOREIGN KEY (`projeto_id`) REFERENCES `projetos` (`id`)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE,
-    CONSTRAINT `fk_compras_comprador`
-        FOREIGN KEY (`comprador_id`) REFERENCES `usuario` (`id`)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE,
-    CONSTRAINT `fk_compras_vendedor`
-        FOREIGN KEY (`vendedor_id`) REFERENCES `usuario` (`id`)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `chat_mensagens` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `compra_id` INT UNSIGNED NOT NULL,
-    `remetente_id` INT UNSIGNED NOT NULL,
-    `destinatario_id` INT UNSIGNED NOT NULL,
-    `mensagem` TEXT NOT NULL,
-    `tipo` ENUM('TEXT', 'SYSTEM') NOT NULL DEFAULT 'TEXT',
-    `criado_em` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    KEY `idx_chat_compra_id` (`compra_id`),
-    CONSTRAINT `fk_chat_compra`
-        FOREIGN KEY (`compra_id`) REFERENCES `compras` (`id`)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
 INSERT INTO `categorias` (`categoria`) VALUES
     ('Web'),
     ('Mobile'),
