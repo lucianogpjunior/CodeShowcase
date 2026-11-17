@@ -4,14 +4,15 @@ A aplicação usa roteamento manual em `public/index.php`, templates em `src/Vie
 
 ## Executando com Docker
 
-Na primeira execução, crie `codeshowcase-docker/.env` a partir de
-`codeshowcase-docker/.env.example` e defina senhas próprias para o banco:
+Requer Docker Engine com o plugin Docker Compose. O script Linux cria
+`codeshowcase-docker/.env` a partir do exemplo na primeira execução. Revise as
+senhas desse arquivo antes de usar fora do ambiente local.
 
 ```bash
-cp codeshowcase-docker/.env.example codeshowcase-docker/.env
+./subir-local/iniciar-local.sh
 ```
 
-Suba a aplicação e o MySQL a partir da raiz do repositório:
+Ou suba manualmente a aplicação e o MySQL a partir da raiz:
 
 ```bash
 docker compose -f codeshowcase-docker/compose.yaml up -d --build
@@ -21,6 +22,13 @@ A aplicação estará disponível em `http://localhost:8080`. O Compose configur
 conexão da aplicação para o serviço `db`, aguarda o MySQL ficar saudável e
 aplica `codeshowcase/database/schema_local.sql` antes de iniciar a aplicação.
 Assim, o esquema também é aplicado quando já existe um volume de banco criado.
+Os scripts para iniciar, parar e consultar o ambiente Linux ficam em
+`subir-local/`. Os volumes usam a opção `:Z` para permitir o acesso dos
+containers em sistemas Fedora com SELinux habilitado.
+
+A tabela `pedidos` registra o usuário, o projeto, o valor do pedido e o status
+(`pendente`, `confirmado` ou `cancelado`); novos pedidos começam como
+`pendente`.
 
 ## Pré-requisitos
 

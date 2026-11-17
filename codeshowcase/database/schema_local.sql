@@ -77,6 +77,28 @@ CREATE TABLE IF NOT EXISTS `projetos` (
     CONSTRAINT `ck_projetos_preco` CHECK (`preco` >= 0)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `pedidos` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `usuario_id` INT UNSIGNED NOT NULL,
+    `projeto_id` INT UNSIGNED NOT NULL,
+    `valor_total` DECIMAL(10,2) NOT NULL,
+    `dt_pedido` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `status` ENUM('pendente', 'confirmado', 'cancelado') NOT NULL DEFAULT 'pendente',
+    PRIMARY KEY (`id`),
+    KEY `idx_pedidos_usuario_id` (`usuario_id`),
+    KEY `idx_pedidos_projeto_id` (`projeto_id`),
+    KEY `idx_pedidos_status_dt_pedido` (`status`, `dt_pedido`),
+    CONSTRAINT `fk_pedidos_usuario`
+        FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT `fk_pedidos_projeto`
+        FOREIGN KEY (`projeto_id`) REFERENCES `projetos` (`id`)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT `ck_pedidos_valor_total` CHECK (`valor_total` >= 0)
+) ENGINE=InnoDB;
+
 INSERT INTO `categorias` (`categoria`) VALUES
     ('Web'),
     ('Mobile'),

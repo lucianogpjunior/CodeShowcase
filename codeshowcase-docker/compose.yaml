@@ -12,7 +12,7 @@ services:
       DB_LOCAL_USER: ${MYSQL_USER:?Defina MYSQL_USER em codeshowcase-docker/.env}
       DB_LOCAL_PASSWORD: ${MYSQL_PASSWORD:?Defina MYSQL_PASSWORD em codeshowcase-docker/.env}
     volumes:
-      - ../codeshowcase:/var/www/html
+      - ../codeshowcase:/var/www/html:Z
     depends_on:
       db-init:
         condition: service_completed_successfully
@@ -38,7 +38,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ../codeshowcase/database/schema_local.sql:/schema_local.sql:ro
+      - ../codeshowcase/database/schema_local.sql:/schema_local.sql:ro,Z
     entrypoint: ["sh", "-c"]
     command:
       - mysql --host=db --user="$${MYSQL_USER}" --password="$${MYSQL_PASSWORD}" "$${MYSQL_DATABASE}" < /schema_local.sql
